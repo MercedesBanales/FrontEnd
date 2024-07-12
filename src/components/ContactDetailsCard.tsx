@@ -5,7 +5,7 @@ interface Props {
     onClick: () => void;
 }
 
-export default function ContactDetails({ contact, onClick } : Props) {
+export default function ContactDetailsCard({ contact, onClick } : Props) {
     return (
         <div className="flex flex-col bg-gray-100 gap-4 rounded-3xl p-4 w-2/4">
             <div className="flex justify-end gap-2">

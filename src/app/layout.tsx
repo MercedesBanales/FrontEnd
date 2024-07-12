@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
     <body className={`${inter.className} min-h-screen flex flex-col`}>
         <NavigationBar />
-        <div className="flex flex-1 justify-center items-center w-full">
+        <div className="flex flex-1 flex-col gap-4 items-center justify-center w-full">
           <GlobalReduxProvider>
             {children}
           </GlobalReduxProvider>

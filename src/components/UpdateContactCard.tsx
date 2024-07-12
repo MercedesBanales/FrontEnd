@@ -1,14 +1,16 @@
 import { Contact } from "@/types/Contact";
+import UpdateContactForm from "./UpdateContactForm";
 
 interface Props {
     contact: Contact;
     onClick: () => void;
 }
 
-export default function UpdateContactInfo({ contact, onClick }: Props) {
+export default function UpdateContactCard({ contact, onClick }: Props) {
 
     return (
-        <div className="flex flex-col bg-gray-100 gap-4 rounded-3xl p-4 w-2/4">
+        <>
+         <div className="flex flex-col flex-wrap bg-gray-100 p-4 rounded-3xl w-3/4">
             <div className="flex justify-end gap-2">
                 <button onClick={onClick}>
                     <svg className="w-6 h-6 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -16,12 +18,14 @@ export default function UpdateContactInfo({ contact, onClick }: Props) {
                     </svg>
                 </button>
             </div>
-            <div className="flex flex-col items-center p-6 gap-8">
+            <div className="flex items-center p-6 gap-6">
                 <img className="rounded-full border-2 p-1 border-violet-400 w-32 h-32" src="../profile-pic.webp" alt={contact?.name} />
                 <h1 className="font-bold text-2xl">{contact?.name}</h1>
             </div>
-
+            <UpdateContactForm />
         </div>
-        
+        <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit">Save</button>
+        </>
+       
     );
 }
