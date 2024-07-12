@@ -28,6 +28,27 @@ const InputEmailComponent = ({ field, form, ...props }: { field: any, form: any,
     />
 );
 
+const handleSubmit = async (values: Values) => {
+    try {
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(values),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        console.log(localStorage.getItem('token'))
+    } catch (error) {
+
+    }
+}
+
 export default function LoginForm() {
     return (<Formik
         initialValues={{
@@ -35,13 +56,8 @@ export default function LoginForm() {
           password: '',
         }}
         onSubmit={(
-          values: Values,
-          { setSubmitting }: FormikHelpers<Values>
-        ) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 500);
+          values: Values) => {
+          handleSubmit(values);
         }}
       >
         <Form className="flex flex-col items-center w-2/4 gap-8">
