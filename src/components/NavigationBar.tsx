@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link';
 
 export default function NavigationBar() {
     return (
@@ -12,14 +13,14 @@ export default function NavigationBar() {
             <div className="flex flex-1 items-center justify-center sm:items-stretch">
                 <div className="hidden sm:block">
                     <div className="flex space-x-4">
-                        <a href="#" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Contacts</a>
-                        <a href="#" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Notes</a>
+                        <Link href="" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Contacts</Link>
+                        <Link href="" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Notes</Link>
                     </div>
                 </div>
             </div>
             <div className="flex items-center sm:static sm:inset-auto">
-                <a href="#" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Login</a>
-                <a href="#" className="rounded-3xl px-6 py-2 text-xs font-medium text-white bg-violet-400 hover:text-white">Sign in</a>
+                <Link href="/login" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Login</Link>
+                <Link href="#" className="rounded-3xl px-6 py-2 text-xs font-medium text-white bg-violet-400 hover:text-white">Sign in</Link>
             </div>
             </div>
         </div>

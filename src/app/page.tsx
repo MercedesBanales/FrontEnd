@@ -1,9 +1,7 @@
-import NavigationBar from "./components/NavigationBar"
-
 export default function Home() {
   return (
-    <main className="p-6">
-      <NavigationBar />
+    <main>
+      <p className="text-black">Home</p>
     </main>
   );
 }
