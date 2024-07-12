@@ -1,12 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
-
-interface Values {
-    email: string;
-    password: string;
-  }
+import { Field, Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
     <input
@@ -28,35 +24,42 @@ const InputEmailComponent = ({ field, form, ...props }: { field: any, form: any,
     />
 );
 
-const handleSubmit = async (values: Values) => {
-    try {
-        const response = await fetch('http://localhost:3000/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values),
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        console.log(localStorage.getItem('token'))
-    } catch (error) {
-
-    }
-}
 
 export default function LoginForm() {
+    const router = useRouter();
+    
+    const handleSubmit = async (values: { email: string, password: string }) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+            console.log(localStorage.getItem('token'));
+
+            router.push('/contacts');
+
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    };
+
     return (<Formik
         initialValues={{
           email: '',
           password: '',
         }}
         onSubmit={(
-          values: Values) => {
+          values: { email: string, password: string }) => {
           handleSubmit(values);
         }}
       >
@@ -68,5 +71,4 @@ export default function LoginForm() {
             <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit">Login</button>
         </Form>
     </Formik>)
-
 }
