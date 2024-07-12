@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "../components/NavigationBar";
+import { GlobalReduxProvider } from "./GlobalRedux/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
     <body className={`${inter.className} min-h-screen flex flex-col`}>
         <NavigationBar />
         <div className="flex flex-1 justify-center items-center w-full">
-          {children}
+          <GlobalReduxProvider>
+            {children}
+          </GlobalReduxProvider>
         </div>
       </body>
     </html>

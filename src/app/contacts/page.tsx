@@ -1,3 +1,5 @@
+import ContactsList from "@/components/ContactsList";
+
 export default function Page() {
     return (
         <div className="flex flex-col pt-20 w-full h-screen items-start gap-8">
@@ -11,6 +13,7 @@ export default function Page() {
                         <span className="sr-only">Search</span>
                     </button>
             </div>
+            <ContactsList />
         </div>
     );
 }
