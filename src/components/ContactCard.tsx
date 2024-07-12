@@ -21,7 +21,7 @@ export default function ContactCard( { contact }: Prop) {
     return (
         <div className="flex justify-between rounded-3xl p-4 items-center bg-fuchsia-100 w-5/12">
             <div className="flex justify-center gap-4 items-center">
-                <img className="rounded-full" src={contact.imagePath} alt="image" />
+                <img className="rounded-full w-14 h-14" src="./profile-pic.webp" alt="image" />
                 <div className="flex flex-col gap-2">
                     <h2 className="font-bold text-lg text-black">{contact.name}</h2>
                     <p className="text-xs text-black">{contact.email}</p>
