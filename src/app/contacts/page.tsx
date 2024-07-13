@@ -13,7 +13,7 @@ export default function Page() {
     return (
         <>
         {!create && <ContactsMainPage onClose={() => setCreate(true)}/>}
-        {create && <CreateContactDialog onClose={() => setCreate(false)} />}
+        {create && <CreateContactDialog onClose={() => setCreate(false)}/>}
         </>
     );
 }

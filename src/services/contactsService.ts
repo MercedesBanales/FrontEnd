@@ -1,5 +1,18 @@
 import { Contact } from "@/types/Contact";
 
+export const createContact = async (contact: Contact) : Promise<void> => {
+    const response = await fetch('http://localhost:3000/api/contacts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(contact)
+    });
+    if (!response.ok) throw new Error('Failed to create contact');
+}
+
+
 export const getContacts = async () : Promise<Contact[]> => {
     const response = await fetch('http://localhost:3000/api/contacts', {
         method: 'GET',

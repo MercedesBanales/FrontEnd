@@ -1,19 +1,13 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
 import * as contactsService from "@/services/contactsService";
 import { Contact } from "@/types/Contact";
+import { forwardRef } from "react";
 
-const UpdateSchema = Yup.object().shape({
-    name: Yup.string().required('Name cannot be empty'),
-    email: Yup.string().email('Invalid email address').required('Email address cannot be empty'),
-    address: Yup.string().required('Address cannot be empty'),
-    phone: Yup.string().required('Phone cannot be empty'),
-    imagePath: Yup.string().required('Image path cannot be empty'),
-})
-
-const handleSubmit = async (values: ContactValue) => {
+const handleSubmit = async (values: ContactValue, create: boolean) => {
     try {
-        //
+        if (create) await contactsService.createContact({ ...values } as Contact);
+        else await contactsService.updateContact(values as Contact);
     } catch (error: any) {
         console.error(error.message);
     }
@@ -21,17 +15,19 @@ const handleSubmit = async (values: ContactValue) => {
 
 interface Props {
     contact?: Contact;
+    schema: Yup.ObjectSchema<ContactValue>
+    create: boolean;
 }
 
-interface ContactValue {
-    name: string;
-    address: string;
-    email: string;
-    phone: string;
-    imagePath: string;
+export interface ContactValue {
+    name?: string;
+    address?: string;
+    email?: string;
+    phone?: string;
+    imagePath?: string;
 }
 
-export default function ContactForm( { contact }: Props) {
+const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create }, ref) => {
     return (
         <>
         <Formik
@@ -41,12 +37,14 @@ export default function ContactForm( { contact }: Props) {
                 email: '',
                 phone: '',
                 imagePath: '',
+                file: null
             }}
-            validationSchema={UpdateSchema}
+            validationSchema={schema}
             onSubmit={(
             values: ContactValue ) => {
-                handleSubmit(values as ContactValue);
+                handleSubmit(values as ContactValue, create);
             }}
+            innerRef={ref}
         >
             {({errors, touched}) => (
                 <Form className="flex flex-col items-center justify-evenly w-full gap-8">
@@ -81,7 +79,7 @@ export default function ContactForm( { contact }: Props) {
                     </div>
                     <div className="flex flex-col gap-1 w-1/2">
                         <label className="text-black text-base font-medium">Profile Picture</label>
-                        <Field id="image" name="image" type="file" className="text-sm" />
+                        <Field id="image" name="imagePath" type="file" className="text-sm" />
                         {errors.imagePath && touched.imagePath ? (
                             <label className="text-red-500 text-sm w-fit">{errors.imagePath}</label>
                         ) : null}
@@ -92,4 +90,6 @@ export default function ContactForm( { contact }: Props) {
         </Formik>
         </>
     )
-}
+});
+
+export default ContactForm;

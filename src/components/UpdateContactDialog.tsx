@@ -1,10 +1,19 @@
 import { Contact } from "@/types/Contact";
 import ContactForm from "./ContactForm";
+import * as Yup from 'yup';
 
 interface Props {
     contact: Contact;
     onClick: () => void;
 }
+
+const UpdateSchema = Yup.object().shape({
+    name: Yup.string(),
+    email: Yup.string().email('Invalid email address'),
+    address: Yup.string(),
+    phone: Yup.string(),
+    imagePath: Yup.string(),
+})
 
 export default function UpdateContactDialog({ contact, onClick }: Props) {
 
@@ -22,7 +31,7 @@ export default function UpdateContactDialog({ contact, onClick }: Props) {
                 <img className="rounded-full border-2 p-1 border-violet-400 w-32 h-32" src="../profile-pic.webp" alt={contact?.name} />
                 <h1 className="font-bold text-2xl">{contact?.name}</h1>
             </div>
-            <ContactForm contact={contact}/>
+            <ContactForm contact={contact} schema={UpdateSchema} create={false}/>
         </div>
         <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit">Save</button>
         </>
