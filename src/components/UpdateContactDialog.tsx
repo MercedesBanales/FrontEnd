@@ -1,12 +1,12 @@
 import { Contact } from "@/types/Contact";
-import UpdateContactForm from "./UpdateContactForm";
+import ContactForm from "./ContactForm";
 
 interface Props {
     contact: Contact;
     onClick: () => void;
 }
 
-export default function UpdateContactCard({ contact, onClick }: Props) {
+export default function UpdateContactDialog({ contact, onClick }: Props) {
 
     return (
         <>
@@ -22,7 +22,7 @@ export default function UpdateContactCard({ contact, onClick }: Props) {
                 <img className="rounded-full border-2 p-1 border-violet-400 w-32 h-32" src="../profile-pic.webp" alt={contact?.name} />
                 <h1 className="font-bold text-2xl">{contact?.name}</h1>
             </div>
-            <UpdateContactForm />
+            <ContactForm contact={contact}/>
         </div>
         <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit">Save</button>
         </>
