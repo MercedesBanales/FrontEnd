@@ -5,6 +5,7 @@ import { FormikProps } from "formik";
 
 interface Props {
     onClose: () => void;
+    onSuccess: () => void;
 }
 
 const CreateSchema = Yup.object().shape({
@@ -18,12 +19,12 @@ const CreateSchema = Yup.object().shape({
     )
 })
 
-export default function CreateContactDialog( { onClose } : Props) {
+export default function CreateContactDialog( { onClose, onSuccess } : Props) {
     const formikRef = useRef<FormikProps<ContactValue> | null>(null);
     const handleSubmit = () => {
         if (formikRef.current) {
             formikRef.current.handleSubmit();
-            onClose();
+            onSuccess();
         }
     };
     return (
