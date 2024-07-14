@@ -33,7 +33,7 @@ export default function ContactCard( { contact }: Prop) {
                 </div>
             <div className="flex flex-col gap-2">
                     <h2 className="font-bold text-lg text-black">{contact.name}</h2>
-                    <p className="text-xs text-black">{contact.email}</p>
+                    <p className="text-xs text-black">{contact.title}</p>
                 </div>
             </div>
             <div>

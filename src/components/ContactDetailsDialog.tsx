@@ -32,18 +32,21 @@ export default function ContactDetailsDialog({ contact, onClick } : Props) {
                     />
                 </div>
             </div>
-                <h1 className="font-bold text-2xl">{contact?.name}</h1>
+                <div className="flex flex-col items-center justify-center gap-3">
+                    <h1 className="font-bold text-2xl">{contact.name} {contact.surname}</h1>
+                    <p className="text-gray-600 text-base">{ contact.title }</p>
+                </div>
                 <div className="flex flex-col items-center gap-2">
                     <h1 className="font-bold text-black">Address</h1>
-                    <p className="text-gray-400 text-sm">{ contact.address }</p>
+                    <p className="text-gray-500 text-sm">{ contact.address }</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                     <h1 className="font-bold text-black">Phone</h1>
-                    <p className="text-gray-400 text-sm">{ contact.phone }</p>
+                    <p className="text-gray-500 text-sm">{ contact.phone }</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                     <h1 className="font-bold text-black">Email</h1>
-                    <p className="text-gray-400 text-sm">{ contact.email }</p>
+                    <p className="text-gray-500 text-sm">{ contact.email }</p>
                 </div>  
             </div>
         </div>

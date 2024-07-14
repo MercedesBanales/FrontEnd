@@ -12,8 +12,10 @@ interface Props {
 
 const UpdateSchema = Yup.object().shape({
     name: Yup.string(),
+    surname: Yup.string(),
     email: Yup.string().email('Invalid email address'),
     address: Yup.string(),
+    title: Yup.string(),
     phone: Yup.string(),
     file: Yup.mixed<File>().nullable()
                 .test("fileFormat", "Unsupported Format", value => {
@@ -48,7 +50,12 @@ export default function UpdateContactDialog({ contact }: Props) {
                         layout="fill"
                     />
                 </div>
-            </div>                <h1 className="font-bold text-2xl">{contact?.name}</h1>
+            </div>
+            <div className="flex flex-col items-start justify-center gap-4">
+                <h1 className="font-bold text-2xl">{contact.name} {contact.surname}</h1>
+                <p className="text-sm text-gray-500">{contact.title}</p>
+                
+            </div>
             </div>
             <ContactForm contact={contact} schema={UpdateSchema} ref={formikRef} create={false} setMessage={setMessage}/>
         </div>
