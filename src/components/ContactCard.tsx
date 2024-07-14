@@ -19,15 +19,19 @@ export default function ContactCard( { contact }: Prop) {
     }
 
     return (
-        <div className="flex justify-between rounded-3xl p-4 items-center bg-fuchsia-100 w-1/2">
+        <div className="flex justify-between rounded-3xl p-4 items-center bg-fuchsia-100 w-[49%]">
             <div className="flex justify-center gap-4 items-center">
-            <Image
-                className="rounded-full"
-                src={`/${contact.imagePath}`}
-                alt="Contact Image"
-                width={56}
-                height={56}
-            />                <div className="flex flex-col gap-2">
+            <div className="w-14 h-14 rounded-full overflow-hidden">
+                    <Image
+                        className="object-cover rounded-full"
+                        src={`/${contact.imagePath}`}
+                        alt="Contact Image"
+                        width={56}
+                        height={56}
+                        layout="responsive"
+                    />
+                </div>
+            <div className="flex flex-col gap-2">
                     <h2 className="font-bold text-lg text-black">{contact.name}</h2>
                     <p className="text-xs text-black">{contact.email}</p>
                 </div>
