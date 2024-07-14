@@ -12,6 +12,7 @@ interface Props {
     create: boolean;
     onClose?: () => void;
     setMessage: (message: string) => void
+    onSuccess?: () => void
 }
 
 export interface ContactValue {
@@ -22,7 +23,7 @@ export interface ContactValue {
     file?: File | null;
 }
 
-const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create, onClose, setMessage }, ref) => {
+const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create, onClose, setMessage, onSuccess }, ref) => {
     const dispatch = useDispatch();
 
     const createContact = async (values: ContactValue, formData: FormData) =>{
@@ -36,6 +37,7 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
                     imagePath: response.path }
                 dispatch(addContact(contact))
                 if (onClose) onClose();
+                if (onSuccess) onSuccess();
         } catch (error: any) {
             setMessage(error.message)
         }      

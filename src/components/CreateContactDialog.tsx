@@ -43,7 +43,7 @@ export default function CreateContactDialog( { onClose, onSuccess } : Props) {
                     </svg>
             </button>
             <h1 className="text-3xl font-bold p-6 w-full">NEW CONTACT</h1>
-            <ContactForm schema={CreateSchema} ref={formikRef} create={true} onClose={onClose} setMessage={setMessage}/>
+            <ContactForm schema={CreateSchema} ref={formikRef} create={true} onClose={onClose} setMessage={setMessage} onSuccess={onSuccess}/>
         </div>
         <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit" onClick={handleSubmit}>Create</button>
         </>
