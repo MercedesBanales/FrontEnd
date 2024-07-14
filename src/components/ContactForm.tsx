@@ -4,7 +4,7 @@ import * as contactsService from "@/services/contactsService";
 import { Contact } from "@/types/Contact";
 import { forwardRef } from "react";
 import { useDispatch } from "react-redux";
-import { addContact } from "@/app/GlobalRedux/Features/contactsSlice";
+import { addContact, setContacts } from "@/app/GlobalRedux/Features/contactsSlice";
 
 interface Props {
     contact?: Contact;
@@ -22,6 +22,23 @@ export interface ContactValue {
 
 const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create }, ref) => {
     const dispatch = useDispatch();
+
+    const createContact = async (values: ContactValue, formData: FormData) =>{
+        const response = await contactsService.createContact(formData);
+                const contact = { id: response.id, 
+                    name: values.name!, 
+                    address: values.address!, 
+                    email: values.email!, 
+                    phone: values.phone!, 
+                    imagePath: response.path }
+                dispatch(addContact(contact))
+    }
+
+    const updateContact = async (values: ContactValue, formData: FormData) =>{
+        await contactsService.updateContact(formData, contact!.id);
+        dispatch(setContacts(await contactsService.getContacts()));
+    }
+
     const handleSubmit = async (values: ContactValue, create: boolean) => {
         try {
             const formData = new FormData();
@@ -30,12 +47,8 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
             if (values.email) formData.append('email', values.email);
             if (values.phone) formData.append('phone', values.phone);
             if (values.file) formData.append('file', values.file);
-            if (create) {
-                const contact_id = await contactsService.createContact(formData);
-                const contact = { id: contact_id, name: values.name!, address: values.address!, email: values.email!, phone: values.phone!, imagePath: values.file!.name }
-                dispatch(addContact(contact))
-            }
-            else await contactsService.updateContact(formData, contact!.id);
+            if (create) createContact(values, formData)
+            else updateContact(values, formData)
         } catch (error: any) {
             console.error(error.message);
         }

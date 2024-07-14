@@ -23,6 +23,7 @@ export default function CreateContactDialog( { onClose } : Props) {
     const handleSubmit = () => {
         if (formikRef.current) {
             formikRef.current.handleSubmit();
+            onClose();
         }
     };
     return (
