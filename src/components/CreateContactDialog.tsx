@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ContactForm, { ContactValue } from "./ContactForm";
 import * as Yup from 'yup';
 import { FormikProps } from "formik";
+import ErrorDialog from "./ErrorDialog";
 
 interface Props {
     onClose: () => void;
@@ -21,14 +22,20 @@ const CreateSchema = Yup.object().shape({
 
 export default function CreateContactDialog( { onClose, onSuccess } : Props) {
     const formikRef = useRef<FormikProps<ContactValue> | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const setMessage = (message: string) => {
+        setError(message);
+    }
+
     const handleSubmit = () => {
         if (formikRef.current) {
             formikRef.current.handleSubmit();
-            onSuccess();
         }
     };
     return (
         <>
+        {error && <ErrorDialog message={error} onClose={() => setError(null)}/>}
         <div className="flex flex-col flex-wrap bg-gray-100 px-4 rounded-3xl w-3/4 items-end">
             <button className="pr-4 pt-6" onClick={onClose}>
                     <svg className="w-6 h-6 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -36,7 +43,7 @@ export default function CreateContactDialog( { onClose, onSuccess } : Props) {
                     </svg>
             </button>
             <h1 className="text-3xl font-bold p-6 w-full">NEW CONTACT</h1>
-            <ContactForm schema={CreateSchema} ref={formikRef} create={true}/>
+            <ContactForm schema={CreateSchema} ref={formikRef} create={true} onClose={onClose} setMessage={setMessage}/>
         </div>
         <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit" onClick={handleSubmit}>Create</button>
         </>

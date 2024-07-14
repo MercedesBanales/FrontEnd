@@ -3,7 +3,8 @@ import ContactForm, { ContactValue } from "./ContactForm";
 import Image from 'next/image';
 import * as Yup from 'yup';
 import { FormikProps } from "formik";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import ErrorDialog from "./ErrorDialog";
 
 interface Props {
     contact: Contact;
@@ -22,20 +23,26 @@ const UpdateSchema = Yup.object().shape({
 
 export default function UpdateContactDialog({ contact }: Props) {
     const formikRef = useRef<FormikProps<ContactValue> | null>(null);
+    const [error, setError] = useState<string | null>(null)
     const handleSubmit = () => {
         if (formikRef.current) {
             formikRef.current.handleSubmit();
         }
     };
 
+    const setMessage = (message: string) => {
+        setError(message)
+    }
+
     return (
         <>
+        {error && <ErrorDialog message={error} onClose={() => setError(null)} />}
          <div className="flex flex-col flex-wrap bg-gray-100 p-4 rounded-3xl w-3/4">
             <div className="flex items-center p-6 gap-6">
                 <Image className="rounded-full border-2 p-1 border-violet-400" src={`/${contact.imagePath}`} alt={contact.name} width={120} height={120} />
                 <h1 className="font-bold text-2xl">{contact?.name}</h1>
             </div>
-            <ContactForm contact={contact} schema={UpdateSchema} ref={formikRef} create={false}/>
+            <ContactForm contact={contact} schema={UpdateSchema} ref={formikRef} create={false} setMessage={setMessage}/>
         </div>
         <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit" onClick={handleSubmit}>Save</button>
         </>

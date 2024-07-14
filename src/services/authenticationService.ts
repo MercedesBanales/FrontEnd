@@ -6,7 +6,7 @@ export const login = async (email: string, password: string): Promise<void> => {
         },
         body: JSON.stringify({ email, password }),
     });
-    if (!response.ok) throw new Error('Invalid credentials');
     const data = await response.json();
+    if (!response.ok) throw new Error(data.message);
     localStorage.setItem('token', data.token);
 }

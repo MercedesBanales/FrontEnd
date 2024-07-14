@@ -10,6 +10,8 @@ interface Props {
     contact?: Contact;
     schema: Yup.ObjectSchema<ContactValue>
     create: boolean;
+    onClose?: () => void;
+    setMessage: (message: string) => void
 }
 
 export interface ContactValue {
@@ -20,11 +22,12 @@ export interface ContactValue {
     file?: File | null;
 }
 
-const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create }, ref) => {
+const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create, onClose, setMessage }, ref) => {
     const dispatch = useDispatch();
 
     const createContact = async (values: ContactValue, formData: FormData) =>{
-        const response = await contactsService.createContact(formData);
+        try {
+            const response = await contactsService.createContact(formData);
                 const contact = { id: response.id, 
                     name: values.name!, 
                     address: values.address!, 
@@ -32,6 +35,10 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
                     phone: values.phone!, 
                     imagePath: response.path }
                 dispatch(addContact(contact))
+                if (onClose) onClose();
+        } catch (error: any) {
+            setMessage(error.message)
+        }      
     }
 
     const updateContact = async (values: ContactValue, formData: FormData) =>{
@@ -40,7 +47,6 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
     }
 
     const handleSubmit = async (values: ContactValue, create: boolean) => {
-        try {
             const formData = new FormData();
             if (values.name) formData.append('name', values.name);
             if (values.address) formData.append('address', values.address);
@@ -49,9 +55,6 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
             if (values.file) formData.append('file', values.file);
             if (create) createContact(values, formData)
             else updateContact(values, formData)
-        } catch (error: any) {
-            console.error(error.message);
-        }
     }
 
     return (
