@@ -1,11 +1,11 @@
-'use client'
-
-import { useSelector } from 'react-redux';
 import ContactCard from './ContactCard';
-import { RootState } from '@/app/GlobalRedux/store';
+import { Contact } from '@/types/Contact';
 
-export default function ContactsList() {
-    const contacts = useSelector((state: RootState) => state.contacts.value);
+interface Props {
+    contacts: Contact[];
+}
+
+export default function ContactsList({ contacts }: Props) {
 
     return (
         <>

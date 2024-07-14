@@ -34,5 +34,6 @@ export const updateContact = async (formData: FormData, contact_id: string) : Pr
         },
         body: formData
     });
-    if (!response.ok) throw new Error('Failed to update contact');
+    const res = await response.json();
+    if (!response.ok) throw new Error(res.message);
 }
