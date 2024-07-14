@@ -13,7 +13,7 @@ export default function NavigationBar() {
             <div className="flex flex-1 items-center justify-center sm:items-stretch">
                 <div className="hidden sm:block">
                     <div className="flex space-x-4">
-                        <Link href="" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Contacts</Link>
+                        <Link href="/contacts" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Contacts</Link>
                         <Link href="" className="rounded-md px-3 py-2 text-xs font-medium text-black hover:text-white">Notes</Link>
                     </div>
                 </div>

@@ -1,14 +1,13 @@
 import { Contact } from "@/types/Contact";
 
-export const createContact = async (contact: Contact) : Promise<void> => {
+export const createContact = async (formData: FormData) : Promise<void> => {
     const response = await fetch('http://localhost:3000/api/contacts', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(contact)
-    });
+        body: formData
+    })
     if (!response.ok) throw new Error('Failed to create contact');
 }
 
@@ -25,14 +24,13 @@ export const getContacts = async () : Promise<Contact[]> => {
     return res.response.contacts;
 }
 
-export const updateContact = async (contact: Contact) : Promise<void> => {
-    const response = await fetch(`http://localhost:3000/api/contacts/${contact.id}`, {
+export const updateContact = async (formData: FormData, contact_id: string) : Promise<void> => {
+    const response = await fetch(`http://localhost:3000/api/contacts/${contact_id}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(contact)
+        body: formData
     });
     if (!response.ok) throw new Error('Failed to update contact');
 }

@@ -4,11 +4,11 @@ import { Contact } from '@/types/Contact';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface SelectedContactState {
-    value: Contact | null;
+    value: Contact;
 }
 
 const initialState: SelectedContactState = {
-    value: null,
+    value: {} as Contact,
 }
 
 export const selectedContactSlice = createSlice({

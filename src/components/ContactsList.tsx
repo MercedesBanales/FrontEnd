@@ -10,7 +10,7 @@ export default function ContactsList() {
     return (
         <>
             { contacts.length === 0 && <p>No contacts found</p> }
-            <div className="flex flex-wrap w-full gap-4 justify-evenly">
+            <div className="flex flex-wrap w-full gap-2 justify-start">
                 { contacts.map((contact) => (
                     <ContactCard key={contact.id} contact={contact}/>
                 ))} 

@@ -17,7 +17,7 @@ export default function ContactID() {
     return (
         <>
             {!updateDialog && <ContactDetailsDialog contact={contact} onClick={handleClick} />}
-            {updateDialog && <UpdateContactDialog contact={contact} onClick={() => setUpdateDialog(false)} />}
+            {updateDialog && <UpdateContactDialog contact={contact} />}
         </>
     );
 };

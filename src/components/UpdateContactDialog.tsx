@@ -1,10 +1,12 @@
 import { Contact } from "@/types/Contact";
-import ContactForm from "./ContactForm";
+import ContactForm, { ContactValue } from "./ContactForm";
+import Image from 'next/image';
 import * as Yup from 'yup';
+import { FormikProps } from "formik";
+import { useRef } from "react";
 
 interface Props {
     contact: Contact;
-    onClick: () => void;
 }
 
 const UpdateSchema = Yup.object().shape({
@@ -12,28 +14,30 @@ const UpdateSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email address'),
     address: Yup.string(),
     phone: Yup.string(),
-    imagePath: Yup.string(),
+    file: Yup.mixed<File>().nullable()
+                .test("fileFormat", "Unsupported Format", value => {
+                    return !value || (value && ["image/jpeg", "image/png", "image/jpg", "image/webp"].includes(value.type));
+    })
 })
 
-export default function UpdateContactDialog({ contact, onClick }: Props) {
+export default function UpdateContactDialog({ contact }: Props) {
+    const formikRef = useRef<FormikProps<ContactValue> | null>(null);
+    const handleSubmit = () => {
+        if (formikRef.current) {
+            formikRef.current.handleSubmit();
+        }
+    };
 
     return (
         <>
          <div className="flex flex-col flex-wrap bg-gray-100 p-4 rounded-3xl w-3/4">
-            <div className="flex justify-end gap-2">
-                <button onClick={onClick}>
-                    <svg className="w-6 h-6 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M6 18 17.94 6M18 18 6.06 6"/>
-                    </svg>
-                </button>
-            </div>
             <div className="flex items-center p-6 gap-6">
-                <img className="rounded-full border-2 p-1 border-violet-400 w-32 h-32" src="../profile-pic.webp" alt={contact?.name} />
+                <Image className="rounded-full border-2 p-1 border-violet-400" src={`/${contact.imagePath}`} alt={contact.name} width={120} height={120} />
                 <h1 className="font-bold text-2xl">{contact?.name}</h1>
             </div>
-            <ContactForm contact={contact} schema={UpdateSchema} create={false}/>
+            <ContactForm contact={contact} schema={UpdateSchema} ref={formikRef} create={false}/>
         </div>
-        <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit">Save</button>
+        <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit" onClick={handleSubmit}>Save</button>
         </>
        
     );

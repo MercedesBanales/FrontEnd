@@ -4,15 +4,6 @@ import * as contactsService from "@/services/contactsService";
 import { Contact } from "@/types/Contact";
 import { forwardRef } from "react";
 
-const handleSubmit = async (values: ContactValue, create: boolean) => {
-    try {
-        if (create) await contactsService.createContact({ ...values } as Contact);
-        else await contactsService.updateContact(values as Contact);
-    } catch (error: any) {
-        console.error(error.message);
-    }
-}
-
 interface Props {
     contact?: Contact;
     schema: Yup.ObjectSchema<ContactValue>
@@ -24,10 +15,25 @@ export interface ContactValue {
     address?: string;
     email?: string;
     phone?: string;
-    imagePath?: string;
+    file?: File | null;
 }
 
 const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create }, ref) => {
+    const handleSubmit = async (values: ContactValue, create: boolean) => {
+        try {
+            const formData = new FormData();
+            if (values.name) formData.append('name', values.name);
+            if (values.address) formData.append('address', values.address);
+            if (values.email) formData.append('email', values.email);
+            if (values.phone) formData.append('phone', values.phone);
+            if (values.file) formData.append('file', values.file);
+            if (create) await contactsService.createContact(formData);
+            else await contactsService.updateContact(formData, contact!.id);
+        } catch (error: any) {
+            console.error(error.message);
+        }
+    }
+
     return (
         <>
         <Formik
@@ -36,7 +42,6 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
                 address: '',
                 email: '',
                 phone: '',
-                imagePath: '',
                 file: null
             }}
             validationSchema={schema}
@@ -46,8 +51,8 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
             }}
             innerRef={ref}
         >
-            {({errors, touched}) => (
-                <Form className="flex flex-col items-center justify-evenly w-full gap-8">
+            {({errors, touched, setFieldValue}) => (
+                <Form className="flex flex-col items-center justify-evenly w-full gap-8" encType="multipart/form-data">
                 <div className="flex flex-col flex-wrap w-full items-start h-80 gap-4 py-6 pl-6 pr-8 overflow-auto">
                     <div className="flex flex-col gap-1 w-1/2">
                         <label className="text-black text-base font-medium">Name</label>
@@ -79,9 +84,12 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
                     </div>
                     <div className="flex flex-col gap-1 w-1/2">
                         <label className="text-black text-base font-medium">Profile Picture</label>
-                        <Field id="image" name="imagePath" type="file" className="text-sm" />
-                        {errors.imagePath && touched.imagePath ? (
-                            <label className="text-red-500 text-sm w-fit">{errors.imagePath}</label>
+                        <input id="image" name="file" type="file" className="text-sm" 
+                            onChange={(event: any) => {
+                                setFieldValue('file', event.currentTarget.files?.[0]);
+                        }}/>
+                        {errors.file && touched.file ? (
+                            <label className="text-red-500 text-sm w-fit">{errors.file}</label>
                         ) : null}
                     </div>
                 </div>

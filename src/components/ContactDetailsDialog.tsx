@@ -1,4 +1,5 @@
 import { Contact } from "@/types/Contact";
+import Image from 'next/image';
 
 interface Props {
     contact: Contact;
@@ -21,19 +22,24 @@ export default function ContactDetailsDialog({ contact, onClick } : Props) {
                 </button>
             </div>
             <div className="flex flex-col items-center p-6 gap-8">
-                <img className="rounded-full border-2 p-1 border-violet-400 w-32 h-32" src="../profile-pic.webp" alt={contact?.name} />
+                <Image className="rounded-full border-2 p-1 border-violet-400" 
+                src={`/${contact.imagePath}`} 
+                alt={contact.name}
+                width= {120} 
+                height={120}
+                />
                 <h1 className="font-bold text-2xl">{contact?.name}</h1>
                 <div className="flex flex-col items-center gap-2">
                     <h1 className="font-bold text-black">Address</h1>
-                    <p className="text-gray-400 text-sm">{ contact?.address }</p>
+                    <p className="text-gray-400 text-sm">{ contact.address }</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                     <h1 className="font-bold text-black">Phone</h1>
-                    <p className="text-gray-400 text-sm">{ contact?.phone }</p>
+                    <p className="text-gray-400 text-sm">{ contact.phone }</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                     <h1 className="font-bold text-black">Email</h1>
-                    <p className="text-gray-400 text-sm">{ contact?.email }</p>
+                    <p className="text-gray-400 text-sm">{ contact.email }</p>
                 </div>  
             </div>
         </div>
