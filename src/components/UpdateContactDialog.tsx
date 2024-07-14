@@ -39,8 +39,16 @@ export default function UpdateContactDialog({ contact }: Props) {
         {error && <ErrorDialog message={error} onClose={() => setError(null)} />}
          <div className="flex flex-col flex-wrap bg-gray-100 p-4 rounded-3xl w-3/4">
             <div className="flex items-center p-6 gap-6">
-                <Image className="rounded-full border-2 p-1 border-violet-400" src={`/${contact.imagePath}`} alt={contact.name} width={120} height={120} />
-                <h1 className="font-bold text-2xl">{contact?.name}</h1>
+            <div className="w-32 h-32 rounded-full overflow-hidden border-2 p-1 border-violet-400">
+                <div className="relative w-full h-full overflow-hidden rounded-full bg-gray-100">
+                    <Image
+                        className="object-cover rounded-full"
+                        src={`/${contact.imagePath}`}
+                        alt="Contact Image"
+                        layout="fill"
+                    />
+                </div>
+            </div>                <h1 className="font-bold text-2xl">{contact?.name}</h1>
             </div>
             <ContactForm contact={contact} schema={UpdateSchema} ref={formikRef} create={false} setMessage={setMessage}/>
         </div>

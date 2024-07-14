@@ -21,13 +21,17 @@ export default function ContactDetailsDialog({ contact, onClick } : Props) {
                     </svg>
                 </button>
             </div>
-            <div className="flex flex-col items-center p-6 gap-8">
-                <Image className="rounded-full border-2 p-1 border-violet-400" 
-                src={`/${contact.imagePath}`} 
-                alt={contact.name}
-                width= {120} 
-                height={120}
-                />
+            <div className="flex flex-col items-center p-6 gap-6">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-2 p-1 border-violet-400">
+                <div className="relative w-full h-full overflow-hidden rounded-full bg-gray-100">
+                    <Image
+                        className="object-cover rounded-full"
+                        src={`/${contact.imagePath}`}
+                        alt="Contact Image"
+                        layout="fill"
+                    />
+                </div>
+            </div>
                 <h1 className="font-bold text-2xl">{contact?.name}</h1>
                 <div className="flex flex-col items-center gap-2">
                     <h1 className="font-bold text-black">Address</h1>
