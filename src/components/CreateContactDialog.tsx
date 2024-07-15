@@ -44,10 +44,10 @@ export default function CreateContactDialog( { onClose, onSuccess } : Props) {
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M6 18 17.94 6M18 18 6.06 6"/>
                     </svg>
             </button>
-            <h1 className="text-3xl font-bold p-6 w-full">NEW CONTACT</h1>
+            <h1 className="text-3xl font-bold pl-6 pb-4 w-full">NEW CONTACT</h1>
             <ContactForm schema={CreateSchema} ref={formikRef} create={true} onClose={onClose} setMessage={setMessage} onSuccess={onSuccess}/>
         </div>
-        <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit" onClick={handleSubmit}>Create</button>
+        <button className="text-white bg-violet-400 rounded-3xl px-12 py-2 w-fit shadow-md hover:font-semibold hover:shadow-lg" type="submit" onClick={handleSubmit}>Create</button>
         </>
       
 

@@ -16,7 +16,7 @@ const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: a
         {...props}
         type="password"
         className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm"
-        placeholder="password"
+        placeholder='*******'
     />
 );
 
@@ -83,7 +83,7 @@ export default function LoginForm() {
                         <label className="text-red-500 text-sm">{errors.password}</label>
                     ) : null}
                 </div>
-                <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit">Login</button>
+                <button className="text-white bg-violet-400 rounded-3xl px-12 py-2 w-fit shadow-md hover:font-semibold hover:shadow-lg" type="submit">Login</button>
             </Form>
             )}
         </Formik>

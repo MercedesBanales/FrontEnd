@@ -1,4 +1,4 @@
-import { Field, Form, Formik, FormikProps } from "formik";
+import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
 import * as Yup from 'yup';
 import * as contactsService from "@/services/contactsService";
 import { Contact } from "@/types/Contact";
@@ -12,7 +12,7 @@ interface Props {
     create: boolean;
     onClose?: () => void;
     setMessage: (message: string) => void
-    onSuccess?: () => void
+    onSuccess?: (contact?: Contact) => void
 }
 
 export interface ContactValue {
@@ -49,21 +49,35 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
     }
 
     const updateContact = async (values: ContactValue, formData: FormData) =>{
-        await contactsService.updateContact(formData, contact!.id);
-        dispatch(setContacts(await contactsService.getContacts()));
+        try {
+            await contactsService.updateContact(formData, contact!.id);
+            const updatedContact = { id: contact!.id, 
+                name: (values.name) ? values.name : contact!.name,
+                surname: (values.surname) ? values.surname : contact!.surname,
+                address: (values.address) ? values.address : contact!.address,
+                title: (values.title) ? values.title : contact!.title,
+                email: (values.email) ? values.email : contact!.email,
+                phone: (values.phone) ? values.phone : contact!.phone,
+                imagePath: contact!.imagePath}
+            dispatch(setContacts(await contactsService.getContacts()));
+            if (onSuccess) onSuccess(updatedContact);
+        } catch (error: any){
+            setMessage(error.message)
+        }
     }
 
-    const handleSubmit = async (values: ContactValue, create: boolean) => {
-            const formData = new FormData();
-            if (values.name) formData.append('name', values.name);
-            if (values.surname) formData.append('surname', values.surname);
-            if (values.address) formData.append('address', values.address);
-            if (values.title) formData.append('title', values.title);
-            if (values.email) formData.append('email', values.email);
-            if (values.phone) formData.append('phone', values.phone);
-            if (values.file) formData.append('file', values.file);
-            if (create) createContact(values, formData)
-            else updateContact(values, formData)
+    const handleSubmit = async (values: ContactValue, create: boolean, helper: FormikHelpers<ContactValue>) => {
+        const formData = new FormData();
+        if (values.name) formData.append('name', values.name);
+        if (values.surname) formData.append('surname', values.surname);
+        if (values.address) formData.append('address', values.address);
+        if (values.title) formData.append('title', values.title);
+        if (values.email) formData.append('email', values.email);
+        if (values.phone) formData.append('phone', values.phone);
+        if (values.file) formData.append('file', values.file);
+        if (create) createContact(values, formData)
+        else updateContact(values, formData)
+        helper.resetForm();
     }
 
     return (
@@ -80,8 +94,8 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
             }}
             validationSchema={schema}
             onSubmit={(
-            values: ContactValue ) => {
-                handleSubmit(values as ContactValue, create);
+            values: ContactValue, formikHelpers: FormikHelpers<ContactValue> ) => {
+                handleSubmit(values as ContactValue, create, formikHelpers);
             }}
             innerRef={ref}
         >
