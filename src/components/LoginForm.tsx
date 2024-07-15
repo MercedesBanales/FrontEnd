@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import ErrorDialog from './ErrorDialog';
+import { useDispatch } from "react-redux";
+import { setContacts } from "@/app/GlobalRedux/Features/contactsSlice";
+import { getContacts } from "@/services/contactsService";
+import { login } from "@/services/authenticationService";
 import * as Yup from 'yup';
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
@@ -12,7 +16,7 @@ const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: a
         {...props}
         type="password"
         className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm"
-        placeholder="password"
+        placeholder='*******'
     />
 );
 
@@ -35,25 +39,18 @@ const LoginSchema = Yup.object().shape({
 export default function LoginForm() {
     const router = useRouter();
     const [error, setError] = useState(null);
-
+    const dispatch = useDispatch();
+    
     const closeDialog = () =>{
         setError(null);
     }
     
     const handleSubmit = async (values: { email: string, password: string }) => {
         try {
-            const response = await fetch('http://localhost:3000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values),
-            });
-            if (!response.ok) throw new Error('Invalid credentials');
-
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
+            await login(values.email, values.password);
+            const contacts = await getContacts();
             setError(null);
+            dispatch(setContacts(contacts));
             router.push('/contacts');
         } catch (error: any) {
             setError(error.message);
@@ -86,7 +83,7 @@ export default function LoginForm() {
                         <label className="text-red-500 text-sm">{errors.password}</label>
                     ) : null}
                 </div>
-                <button className="text-white bg-violet-400 rounded-lg px-12 py-2 w-fit" type="submit">Login</button>
+                <button className="text-white bg-violet-400 rounded-3xl px-12 py-2 w-fit shadow-md hover:font-semibold hover:shadow-lg" type="submit">Login</button>
             </Form>
             )}
         </Formik>
