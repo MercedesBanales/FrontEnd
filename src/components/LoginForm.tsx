@@ -7,7 +7,6 @@ import ErrorDialog from './ErrorDialog';
 import { useDispatch } from "react-redux";
 import { setContacts } from "@/app/GlobalRedux/Features/contactsSlice";
 import { getContacts } from "@/services/contactsService";
-import { login } from "@/services/authenticationService";
 import * as Yup from 'yup';
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
@@ -46,8 +45,13 @@ export default function LoginForm() {
     }
     
     const handleSubmit = async (values: { email: string, password: string }) => {
+        const { email, password } = values;
         try {
-            await login(values.email, values.password);
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            })            
             const contacts = await getContacts();
             setError(null);
             dispatch(setContacts(contacts));
