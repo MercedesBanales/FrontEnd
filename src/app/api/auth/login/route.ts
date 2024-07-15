@@ -1,13 +1,11 @@
 
 import { serialize } from 'cookie';
-import { NextApiRequest, NextApiResponse } from 'next'
+import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const { email, password } = req.body
+    const { email, password } = await req.json();
     const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: {
@@ -20,12 +18,15 @@ export default async function handler(
     const cookie = serialize('token', data.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV !== 'development',
-        sameSite: 'strict',
         path: '/'
     });
-    res.setHeader('Set-Cookie', cookie)
-    res.status(200).json({ success: true })
+    const newRes = NextResponse.json({status: 200, body: { success: true }})
+    newRes.headers.set('Set-Cookie', cookie);
+    return newRes;
   } catch (error: any) {
-      res.status(500).json({ error: 'Something went wrong.' })
+    return NextResponse.json({
+      status: 500,
+      body: { success: false, message: error.message }
+    })  
   }
 }

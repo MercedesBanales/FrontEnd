@@ -47,7 +47,7 @@ export default function LoginForm() {
     const handleSubmit = async (values: { email: string, password: string }) => {
         const { email, password } = values;
         try {
-            const response = await fetch('/api/auth/login', {
+            await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),

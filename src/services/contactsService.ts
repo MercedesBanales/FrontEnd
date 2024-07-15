@@ -14,17 +14,16 @@ export const createContact = async (formData: FormData) : Promise<{ id: string, 
 }
 
 
-export const getContacts = async () : Promise<Contact[]> => {
-    const response = await fetch('http://localhost:3000/api/contacts', {
+export async function getContacts() {
+    const res = await fetch('api/contacts/get', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         }
     });
-    const res = await response.json();
-    if (!response.ok) throw new Error(res.message);
-    return res.response.contacts;
+    const response = await res.json();
+    if (!res.ok) throw new Error(response.message);
+    return response.body.contacts;
 }
 
 export const updateContact = async (formData: FormData, contact_id: string) : Promise<void> => {
