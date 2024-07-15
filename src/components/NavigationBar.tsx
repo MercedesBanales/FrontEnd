@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link';
 
 export default function NavigationBar() {
+   
     return (
     <>
         <nav className="bg-fuchsia-100 rounded-3xl">

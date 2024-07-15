@@ -23,6 +23,7 @@ export const getContacts = async () : Promise<Contact[]> => {
         }
     });
     const res = await response.json();
+    if (!response.ok) throw new Error(res.message);
     return res.response.contacts;
 }
 
