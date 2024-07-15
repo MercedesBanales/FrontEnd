@@ -10,7 +10,7 @@ export async function createContact (formData: FormData) : Promise<{ id: string,
 
 
 export async function getContacts() {
-    const res = await fetch('api/contacts', {
+    const res = await fetch('/api/contacts', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function getContacts() {
 }
 
 export const updateContact = async (formData: FormData, contact_id: string) : Promise<void> => {
-    const response = await fetch(`api/contacts/${contact_id}`, {
+    const response = await fetch(`/api/contacts/${contact_id}`, {
         method: 'PUT',
         body: formData
     });

@@ -1,24 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
-
-export async function PUT(req: NextRequest, context: any, res: NextResponse) {
+export async function PUT(req: Response, { params } : { params: { contact_id: string}}, res: Response) {
     try {
-        const { params } = context;
+        const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
         const response = await fetch(`http://localhost:3000/api/contacts/${params.contact_id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${token}`,
             },
             body: formData
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.message);
-        return NextResponse.json({
+        return Response.json({
             success: true,
             status: 200
         });
     } catch (err: any) {
-        return NextResponse.json({
+        return Response.json({
             success: false,
             message: err.message
         });
