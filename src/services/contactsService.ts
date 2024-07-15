@@ -1,16 +1,11 @@
-import { Contact } from "@/types/Contact";
-
-export const createContact = async (formData: FormData) : Promise<{ id: string, path: string }>=> {
-    const response = await fetch('http://localhost:3000/api/contacts', {
+export async function createContact (formData: FormData) : Promise<{ id: string, path: string }> {
+    const response = await fetch('/api/contacts/create', {
         method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
         body: formData
     })
     const res = await response.json()
     if (!response.ok) throw new Error(res.message);
-    return { id: res.id, path: res.imagePath }
+    return { id: res.body.id, path: res.body.path }
 }
 
 
