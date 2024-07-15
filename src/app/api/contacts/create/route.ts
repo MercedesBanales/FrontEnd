@@ -15,14 +15,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const data = await response.json();
         if (!response.ok) throw new Error(data.message);
         return NextResponse.json({
+            success: true,
             status: 200,
             body: { id: data.id, path: data.imagePath}
         });
     } catch (error: any) {
-        console.error(error.message); 
         return NextResponse.json({
-            status: 500,
-            body: { message: error.message }
-        });
+            success: false,
+            message: error.message
+        })
+
     }
 }

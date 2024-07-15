@@ -17,6 +17,6 @@ export async function GET (req: NextRequest, res: NextResponse) {
             body: { contacts: data.response.contacts }
         });
     } catch (error: any) {
-        console.log(error.message)   
+        throw new Error(error.message)
     }
 }

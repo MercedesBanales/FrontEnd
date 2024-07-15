@@ -4,7 +4,7 @@ export async function createContact (formData: FormData) : Promise<{ id: string,
         body: formData
     })
     const res = await response.json()
-    if (!response.ok) throw new Error(res.message);
+    if (!res.success) throw new Error(res.message);
     return { id: res.body.id, path: res.body.path }
 }
 
@@ -17,7 +17,7 @@ export async function getContacts() {
         }
     });
     const response = await res.json();
-    if (!res.ok) throw new Error(response.message);
+    if (!response.success) throw new Error(response.message);
     return response.body.contacts;
 }
 

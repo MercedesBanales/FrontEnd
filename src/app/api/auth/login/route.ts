@@ -24,9 +24,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     newRes.headers.set('Set-Cookie', cookie);
     return newRes;
   } catch (error: any) {
-    return NextResponse.json({
-      status: 500,
-      body: { success: false, message: error.message }
-    })  
+      return NextResponse.json({
+        success: false,
+        message: error.message
+      })
   }
 }
