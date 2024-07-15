@@ -30,7 +30,6 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
 
     const createContact = async (values: ContactValue, formData: FormData) =>{
         try {
-            console.log(formData)
             const response = await contactsService.createContact(formData);
                 const contact = { id: response.id, 
                     name: values.name!, 

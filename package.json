@@ -11,9 +11,11 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.6",
     "cookie": "^0.6.0",
+    "form-data": "^4.0.0",
     "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "next": "14.2.5",
+    "node-fetch": "^3.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",
