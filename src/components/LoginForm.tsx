@@ -53,9 +53,13 @@ export default function LoginForm() {
                 body: JSON.stringify({ email, password }),
             })            
             const contacts = await getContacts();
+            console.log('entre 1')
             setError(null);
             dispatch(setContacts(contacts));
+            console.log('entre 2')
             router.push('/contacts');
+            console.log('entre 3')
+
         } catch (error: any) {
             setError(error.message);
         }

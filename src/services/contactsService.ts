@@ -1,5 +1,5 @@
 export async function createContact (formData: FormData) : Promise<{ id: string, path: string }> {
-    const response = await fetch('/api/contacts/create', {
+    const response = await fetch('/api/contacts', {
         method: 'POST',
         body: formData
     })
@@ -10,7 +10,7 @@ export async function createContact (formData: FormData) : Promise<{ id: string,
 
 
 export async function getContacts() {
-    const res = await fetch('api/contacts/get', {
+    const res = await fetch('api/contacts', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -22,13 +22,10 @@ export async function getContacts() {
 }
 
 export const updateContact = async (formData: FormData, contact_id: string) : Promise<void> => {
-    const response = await fetch(`http://localhost:3000/api/contacts/${contact_id}`, {
+    const response = await fetch(`api/contacts/${contact_id}`, {
         method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
         body: formData
     });
     const res = await response.json();
-    if (!response.ok) throw new Error(res.message);
+    if (!res.success) throw new Error(res.message);
 }
