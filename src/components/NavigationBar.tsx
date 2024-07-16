@@ -31,6 +31,10 @@ export default function NavigationBar() {
         router.push('/login');
     }
 
+    const handleContacts = () => {
+        router.push('/contacts');
+    }
+
     return (
     <>
         <nav className="bg-fuchsia-100 rounded-3xl">
@@ -41,7 +45,7 @@ export default function NavigationBar() {
                 </div>
             <div className="flex flex-1 items-center justify-center sm:items-stretch">
                     <div className="flex space-x-4">
-                        <Link href="/contacts" className="rounded-3xl px-3 py-2 text-xs font-medium text-black hover:bg-fuchsia-200 hover:font-semibold hover:shadow">Contacts</Link>
+                        <button className="rounded-3xl px-3 py-2 text-xs font-medium text-black hover:bg-fuchsia-200 hover:font-semibold hover:shadow" onClick={handleContacts}>Contacts</button>
                         <Link href="" className="rounded-3xl px-3 py-2 text-xs font-medium text-black hover:bg-fuchsia-200 hover:font-semibold hover:shadow">Notes</Link>
                     </div>
             </div>

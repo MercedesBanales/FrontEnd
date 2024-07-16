@@ -56,7 +56,6 @@ export default function LoginForm() {
             })            
             const contacts = await getContacts();
             const user = await usersService.getUser();
-            console.log(user)
             setError(null);
             dispatch(setContacts(contacts));
             dispatch(setActiveUser(user));

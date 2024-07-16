@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
  
-export async function middleware(request: NextRequest) {
-    console.log('Middleware executed for', request.url);
-    if (request.url === 'http://localhost:3001/contacts') {
+export function middleware(request: NextRequest) {
+    console.log('Middleware executed for', request.nextUrl.pathname);
+    if (request.nextUrl.pathname.startsWith('/contacts')) {
         const token = request.headers.get('Cookie')?.split("=")[1];
+        console.log('Token:', token)
         if (!token || token === '') {
             console.log('Redirecting to login page');
-            return NextResponse.redirect('http://localhost:3001/login');
+            return NextResponse.redirect(new URL('/login', request.nextUrl));
         }
 
         return NextResponse.next();
