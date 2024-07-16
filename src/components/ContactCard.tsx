@@ -8,7 +8,6 @@ interface Prop {
     contact: Contact
 }
 
-
 export default function ContactCard( { contact }: Prop) {
     const router = useRouter();
     const dispatch = useDispatch();
