@@ -1,19 +1,18 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import * as contactsService from "@/services/contactsService";
  
 export async function middleware(request: NextRequest) {
-    return NextResponse.next();
-    // try {
+    console.log('Middleware executed for', request.url);
+    if (request.url === 'http://localhost:3001/contacts') {
+        const token = request.headers.get('Cookie')?.split("=")[1];
+        if (!token || token === '') {
+            console.log('Redirecting to login page');
+            return NextResponse.redirect('http://localhost:3001/login');
+        }
 
-    //     const contacts = await contactsService.getContacts();
-    //     return NextResponse.next();
-    // } catch (error: any) {
-    //     console.error(error)
-    //     return NextResponse.redirect('http://localhost:3001/login')
-    // }
-}
- 
-export const config = {
-  matcher: '/contacts',
+        return NextResponse.next();
+    } else {
+        return NextResponse.next();
+    }
+
 }

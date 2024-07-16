@@ -1,4 +1,4 @@
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();

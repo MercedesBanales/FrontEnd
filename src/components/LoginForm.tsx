@@ -7,6 +7,8 @@ import ErrorDialog from './ErrorDialog';
 import { useDispatch } from "react-redux";
 import { setContacts } from "@/app/GlobalRedux/Features/contactsSlice";
 import { getContacts } from "@/services/contactsService";
+import { setActiveUser } from "@/app/GlobalRedux/Features/activeUserSlice";
+import * as usersService from "@/services/usersService";
 import * as Yup from 'yup';
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
@@ -53,8 +55,12 @@ export default function LoginForm() {
                 body: JSON.stringify({ email, password }),
             })            
             const contacts = await getContacts();
+            const user = await usersService.getUser();
+            console.log(user)
             setError(null);
             dispatch(setContacts(contacts));
+            dispatch(setActiveUser(user));
+            
             router.push('/contacts');
         } catch (error: any) {
             setError(error.message);

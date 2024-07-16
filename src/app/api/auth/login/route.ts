@@ -1,9 +1,6 @@
-
 import { serialize } from 'cookie';
-import { headers } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
     const response = await fetch('http://localhost:3000/api/login', {
@@ -20,7 +17,10 @@ export async function POST(req: Request, res: Response) {
         secure: process.env.NODE_ENV !== 'development',
         path: '/'
     });
-    const newRes = Response.json({success:true, status: 200, body: { success: true }})
+    const newRes = Response.json({
+      success:true, 
+      status: 200, 
+      body: { token: data.token }})
     newRes.headers.set('Set-Cookie', cookie);
     return newRes;
   } catch (error: any) {

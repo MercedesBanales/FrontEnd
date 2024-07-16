@@ -1,4 +1,4 @@
-export async function PUT(req: Response, { params } : { params: { contact_id: string}}, res: Response) {
+export async function PUT(req: Response, { params } : { params: { contact_id: string}}) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
