@@ -9,6 +9,7 @@ import { setContacts } from "@/app/GlobalRedux/Features/contactsSlice";
 import { getContacts } from "@/services/contactsService";
 import { setActiveUser } from "@/app/GlobalRedux/Features/activeUserSlice";
 import * as usersService from "@/services/usersService";
+import * as authenticationService from "@/services/authenticationService";
 import * as Yup from 'yup';
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
@@ -49,17 +50,12 @@ export default function LoginForm() {
     const handleSubmit = async (values: { email: string, password: string }) => {
         const { email, password } = values;
         try {
-            await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            })            
+            await authenticationService.login(email, password);         
             const contacts = await getContacts();
             const user = await usersService.getUser();
             setError(null);
             dispatch(setContacts(contacts));
             dispatch(setActiveUser(user));
-            
             router.push('/contacts');
         } catch (error: any) {
             setError(error.message);

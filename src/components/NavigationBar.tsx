@@ -7,6 +7,7 @@ import { RootState } from '@/app/GlobalRedux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveUser } from '@/app/GlobalRedux/Features/activeUserSlice';
 import { useRouter } from 'next/navigation';
+import * as authenticationService from '@/services/authenticationService';
 
 export default function NavigationBar() {
     const [login, setLogin] = useState('Login');
@@ -15,18 +16,14 @@ export default function NavigationBar() {
     const router = useRouter();
 
     useEffect(() => {
-        console.log(activeUser)
         if (activeUser?.name) setLogin('Logout');
         else setLogin('Login');
     }, [activeUser]);
 
-    const handleChange = () => {
+    const handleLogin = () => {
         if (login === 'Logout') {
             dispatch(setActiveUser(null))
-            fetch('/api/auth/logout', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-            });
+            authenticationService.logout();
         }
         router.push('/login');
     }
@@ -50,7 +47,7 @@ export default function NavigationBar() {
                     </div>
             </div>
             <div className="flex items-center gap-2 sm:static sm:inset-auto">
-                <button className="rounded-3xl px-3 py-2 text-xs font-medium text-black hover:bg-fuchsia-200 hover:font-semibold hover:shadow" onClick={handleChange}>{login}</button>
+                <button className="rounded-3xl px-3 py-2 text-xs font-medium text-black hover:bg-fuchsia-200 hover:font-semibold hover:shadow" onClick={handleLogin}>{login}</button>
                 <Link href="#" className="rounded-3xl px-6 py-2 text-xs font-medium text-white bg-violet-400">Sign in</Link>
             </div>
             </div>

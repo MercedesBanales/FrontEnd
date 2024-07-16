@@ -10,8 +10,10 @@ export async function PUT(req: Response, { params } : { params: { contact_id: st
             body: formData
         });
         const data = await response.json();
+        console.log("data", data)
         if (!response.ok) throw new Error(data.message);
         return Response.json({
+            imagePath: data.response.imagePath,
             success: true,
             status: 200
         });

@@ -28,7 +28,7 @@ export interface ContactValue {
 const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create, onClose, setMessage, onSuccess }, ref) => {
     const dispatch = useDispatch();
 
-    const createContact = async (values: ContactValue, formData: FormData) =>{
+    const createContact = async (values: ContactValue, formData: FormData, helper: FormikHelpers<ContactValue>) =>{
         try {
             const response = await contactsService.createContact(formData);
                 const contact = { id: response.id, 
@@ -42,14 +42,15 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
                 dispatch(addContact(contact))
                 if (onClose) onClose();
                 if (onSuccess) onSuccess();
+                helper.resetForm();
         } catch (error: any) {
             setMessage(error.message)
         }      
     }
 
-    const updateContact = async (values: ContactValue, formData: FormData) =>{
+    const updateContact = async (values: ContactValue, formData: FormData, helper: FormikHelpers<ContactValue>) =>{
         try {
-            await contactsService.updateContact(formData, contact!.id);
+            const path = await contactsService.updateContact(formData, contact!.id);
             const updatedContact = { id: contact!.id, 
                 name: (values.name) ? values.name : contact!.name,
                 surname: (values.surname) ? values.surname : contact!.surname,
@@ -57,9 +58,11 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
                 title: (values.title) ? values.title : contact!.title,
                 email: (values.email) ? values.email : contact!.email,
                 phone: (values.phone) ? values.phone : contact!.phone,
-                imagePath: contact!.imagePath}
+                imagePath: (path) ? path : contact!.imagePath}
             dispatch(setContacts(await contactsService.getContacts()));
+            console.log(updatedContact)
             if (onSuccess) onSuccess(updatedContact);
+            helper.resetForm();
         } catch (error: any){
             setMessage(error.message)
         }
@@ -74,9 +77,8 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
         if (values.email) formData.append('email', values.email);
         if (values.phone) formData.append('phone', values.phone);
         if (values.file) formData.append('file', values.file);
-        if (create) createContact(values, formData)
-        else updateContact(values, formData)
-        helper.resetForm();
+        if (create) createContact(values, formData, helper)
+        else updateContact(values, formData, helper)
     }
 
     return (

@@ -21,11 +21,12 @@ export async function getContacts() {
     return response.body.contacts;
 }
 
-export const updateContact = async (formData: FormData, contact_id: string) : Promise<void> => {
+export const updateContact = async (formData: FormData, contact_id: string) : Promise<string> => {
     const response = await fetch(`/api/contacts/${contact_id}`, {
         method: 'PUT',
         body: formData
     });
     const res = await response.json();
     if (!res.success) throw new Error(res.message);
+    return res.imagePath;
 }
