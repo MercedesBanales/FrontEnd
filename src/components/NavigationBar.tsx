@@ -35,7 +35,7 @@ export default function NavigationBar() {
     return (
     <>
         <nav className="bg-fuchsia-100 rounded-3xl">
-        <div className="mx-auto max-w-7x lg:px-6 lg:py-4">
+        <div className="mx-auto max-w-7x px-6 py-4">
             <div className="relative flex items-center justify-between">
             <div className="flex flex-shrink-0 items-center">
                     <Image src="/Group2Logo.png" alt="Your Company" width={90} height={80}/>                
