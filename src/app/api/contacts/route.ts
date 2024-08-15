@@ -5,7 +5,7 @@ export async function POST(req: Request) {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
         const headers = new Headers({'Authorization': `Bearer ${token}`});
-        const response = await Fetch.post(`${process.env.URL}/contacts`, headers, formData);
+        const response = await Fetch.post(`${process.env.URL}/contacts`, formData, headers);
         return Response.json({
             success: true,
             status: 200,
@@ -16,7 +16,6 @@ export async function POST(req: Request) {
             success: false,
             message: error.message
         })
-
     }
 }
 

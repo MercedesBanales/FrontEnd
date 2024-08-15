@@ -1,17 +1,15 @@
-export async function login(email: string, password: string) {
-    const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-    }) 
-    const res = await response.json();
-    if (!res.success) throw new Error(res.message);
+import Fetch from '../helpers/fetch';
+
+export async function login(formData: FormData) {
+    try {
+        await Fetch.post('/api/auth/login', formData);
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
 }
 
 export function logout() {
-    fetch('/api/auth/logout', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-    });
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    Fetch.put('/api/auth/logout', headers);
 }
 

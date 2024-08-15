@@ -1,9 +1,9 @@
 class Fetch {
-    public static async get(url: string, head: Headers): Promise<any> {
+    public static async get(url: string, headers: Headers): Promise<any> {
         try {
             const response = await fetch(url, {
                 method: 'GET',
-                headers: head
+                headers: headers
             });
             const data = await response.json();
             if (!response.ok) throw new Error(data.message);
@@ -13,28 +13,29 @@ class Fetch {
         }
     }
 
-    public static async post(url: string, head: Headers,  params: any): Promise<any> {
+    public static async post(url: string, body: any, headers?: Headers): Promise<any> {
         try {
+            console.log(body)
             const response = await fetch(url, {
                 method: 'POST',
-                body: params,
-                headers: head
+                body: body,
+                headers: headers
             });
             const data = await response.json();
+            console.log(data);
             if (!response.ok) throw new Error(data.message);
             return data;
         } catch (error: any) {
             throw new Error(error.message);  
-        }
-        
+        } 
     }
 
-    public static async put(url: string, head: Headers, params: any): Promise<any> {
+    public static async put(url: string, headers: Headers, body?: any): Promise<any> {
         try {
             const response = await fetch(url, {
                 method: 'PUT',
-                body: params,
-                headers: head
+                body: body,
+                headers: headers
             });
             const data = await response.json();
             if (!response.ok) throw new Error(data.message);

@@ -48,9 +48,11 @@ export default function LoginForm() {
     }
     
     const handleSubmit = async (values: { email: string, password: string }) => {
-        const { email, password } = values;
         try {
-            await authenticationService.login(email, password);         
+            const formData = new FormData();
+            formData.append('email', values.email);
+            formData.append('password', values.password);
+            await authenticationService.login(formData);         
             const contacts = await getContacts();
             const user = await usersService.getUser();
             setError(null);
