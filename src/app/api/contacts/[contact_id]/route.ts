@@ -12,10 +12,15 @@ export async function PUT(req: Request, { params } : { params: { contact_id: str
             status: 200
         });
     } catch (err: any) {
-        return Response.json({
+        const body = {
             success: false,
             message: err.message
-        });
+        }
+        return new Response(JSON.stringify(body),
+        {
+            status: 500, 
+            headers: { 'Content-Type': 'application/json' }
+        })
     }
     
 }

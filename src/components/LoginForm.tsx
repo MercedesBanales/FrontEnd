@@ -10,7 +10,7 @@ import { getContacts } from "@/services/contactsService";
 import { setActiveUser } from "@/app/GlobalRedux/Features/activeUserSlice";
 import * as usersService from "@/services/usersService";
 import * as authenticationService from "@/services/authenticationService";
-import * as Yup from 'yup';
+import { LoginSchema } from "../schemas/loginSchema";
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
     <input
@@ -31,12 +31,6 @@ const InputEmailComponent = ({ field, form, ...props }: { field: any, form: any,
         placeholder="johndoe@hotmail.com"
     />
 );
-
-const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email address').required('Email address cannot be empty'),
-    password: Yup.string()
-      .required('Password cannot be empty'),
-  });
 
 export default function LoginForm() {
     const router = useRouter();

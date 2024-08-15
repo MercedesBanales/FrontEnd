@@ -17,9 +17,14 @@ export async function POST(req: Request) {
     newRes.headers.set('Set-Cookie', cookie);
     return newRes;
   } catch (error: any) {
-      return Response.json({
+      const body = {
         success: false,
         message: error.message
+      }
+      return new Response(JSON.stringify(body),
+      {
+          status: 500, 
+          headers: { 'Content-Type': 'application/json' }
       })
   }
 }

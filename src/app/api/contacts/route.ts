@@ -12,9 +12,13 @@ export async function POST(req: Request) {
             body: { id: response.id, path: response.imagePath}
         });
     } catch (error: any) {
-        return Response.json({
+        const body = {
             success: false,
             message: error.message
+        }
+        return new Response(JSON.stringify(body), {
+            status: 500, 
+            headers: { 'Content-Type': 'application/json' }
         })
     }
 }
@@ -30,9 +34,13 @@ export async function GET (req: Request) {
             body: { contacts: response.response.contacts }
         });
     } catch (error: any) {
-        return Response.json({
+        const body = {
             success: false,
             message: error.message
-        }) 
+        }
+        return new Response(JSON.stringify(body), {
+            status: 500, 
+            headers: { 'Content-Type': 'application/json' }
+        })
     }
 }
