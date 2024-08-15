@@ -20,28 +20,20 @@ export async function POST(req: Request) {
     }
 }
 
-export async function GET (req: Request, res: Response) {
+export async function GET (req: Request) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
-        const response = await fetch('http://localhost:3000/api/contacts', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.message);
+        const headers = new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`});
+        const response = await Fetch.get(`${process.env.URL}/contacts`, headers);
         return Response.json({
             success: true,
             status: 200,
-            body: { contacts: data.response.contacts }
+            body: { contacts: response.response.contacts }
         });
     } catch (error: any) {
         return Response.json({
             success: false,
             message: error.message
-        })
-        
+        }) 
     }
 }
