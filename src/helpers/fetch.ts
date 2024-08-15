@@ -15,14 +15,12 @@ class Fetch {
 
     public static async post(url: string, body: any, headers?: Headers): Promise<any> {
         try {
-            console.log(body)
             const response = await fetch(url, {
                 method: 'POST',
                 body: body,
                 headers: headers
             });
             const data = await response.json();
-            console.log(data);
             if (!response.ok) throw new Error(data.message);
             return data;
         } catch (error: any) {

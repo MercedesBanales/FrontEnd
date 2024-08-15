@@ -4,12 +4,8 @@ import React, { useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import ErrorDialog from './ErrorDialog';
-import { useDispatch } from "react-redux";
-import { setContacts } from "@/app/GlobalRedux/Features/contactsSlice";
-import { getContacts } from "@/services/contactsService";
-import { setActiveUser } from "@/app/GlobalRedux/Features/activeUserSlice";
-import * as usersService from "@/services/usersService";
-import * as authenticationService from "@/services/authenticationService";
+import { useAppDispatch } from '@/app/hooks';
+import { login } from "@/app/GlobalRedux/Features/activeUserSlice";
 import { LoginSchema } from "../schemas/loginSchema";
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
@@ -35,7 +31,7 @@ const InputEmailComponent = ({ field, form, ...props }: { field: any, form: any,
 export default function LoginForm() {
     const router = useRouter();
     const [error, setError] = useState(null);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     
     const closeDialog = () =>{
         setError(null);
@@ -46,12 +42,8 @@ export default function LoginForm() {
             const formData = new FormData();
             formData.append('email', values.email);
             formData.append('password', values.password);
-            await authenticationService.login(formData);         
-            const contacts = await getContacts();
-            const user = await usersService.getUser();
+            dispatch(login(formData));     
             setError(null);
-            dispatch(setContacts(contacts));
-            dispatch(setActiveUser(user));
             router.push('/contacts');
         } catch (error: any) {
             setError(error.message);
