@@ -1,7 +1,6 @@
 import { serialize } from 'cookie';
 import Fetch from '../../../../helpers/fetch';
 
-
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();

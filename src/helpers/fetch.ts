@@ -29,22 +29,19 @@ class Fetch {
         
     }
 
-    public static async put(url: string, headers: Headers, data: any): Promise<any> {
-        const response = await fetch(url, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        return response.json();
-    }
-
-    public static async delete(url: string): Promise<any> {
-        const response = await fetch(url, {
-            method: 'DELETE'
-        });
-        return response.json();
+    public static async put(url: string, head: Headers, params: any): Promise<any> {
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                body: params,
+                headers: head
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message);
+            return data;
+        } catch (err: any) {
+            throw new Error(err.message);
+        }
     }
 }
 
