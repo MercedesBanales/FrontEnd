@@ -1,8 +1,8 @@
-export async function PUT(req: Response, { params } : { params: { contact_id: string}}) {
+export async function PUT(req: Request, { params } : { params: { contact_id: string}}) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
-        const response = await fetch(`http://localhost:3000/api/contacts/${params.contact_id}`, {
+        const response = await fetch(`${process.env.URL}/contacts/${params.contact_id}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,

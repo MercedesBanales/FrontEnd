@@ -3,7 +3,7 @@ import { serialize } from 'cookie';
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
-    const response = await fetch('http://localhost:3000/api/login', {
+    const response = await fetch(`${process.env.URL}/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

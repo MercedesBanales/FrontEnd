@@ -3,7 +3,7 @@ export async function POST(req: Request) {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
 
-        const response = await fetch('http://localhost:3000/api/contacts', {
+        const response = await fetch(`${process.env.URL}/contacts`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

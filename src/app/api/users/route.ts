@@ -1,7 +1,7 @@
 export async function GET (request: Request) {
     try {
         const token = request.headers.get('Cookie')?.split("=")[1];
-        const res = await fetch('http://localhost:3000/api/users', {
+        const res = await fetch(`${process.env.URL}/users`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
