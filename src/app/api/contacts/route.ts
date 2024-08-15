@@ -1,21 +1,15 @@
+import Fetch from '../../../helpers/fetch';
+
 export async function POST(req: Request) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
-
-        const response = await fetch(`${process.env.URL}/contacts`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.message);
+        const headers = new Headers({'Authorization': `Bearer ${token}`});
+        const response = await Fetch.post(`${process.env.URL}/contacts`, headers, formData);
         return Response.json({
             success: true,
             status: 200,
-            body: { id: data.id, path: data.imagePath}
+            body: { id: response.id, path: response.imagePath}
         });
     } catch (error: any) {
         return Response.json({
