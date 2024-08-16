@@ -2,9 +2,9 @@ import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
 import * as Yup from 'yup';
 import * as contactsService from "@/services/contactsService";
 import { Contact } from "@/types/Contact";
-import { forwardRef } from "react";
-import { useDispatch } from "react-redux";
-import { addContact, setContacts } from "@/app/GlobalRedux/Features/contactsSlice";
+import { forwardRef, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { createNewContact, selectContactsError, selectContactsStatus, setContacts, setStatus } from "@/app/GlobalRedux/Features/contactsSlice";
 
 interface Props {
     contact?: Contact;
@@ -26,27 +26,24 @@ export interface ContactValue {
 }
 
 const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create, onClose, setMessage, onSuccess }, ref) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+    const status = useAppSelector(selectContactsStatus);
+    const error = useAppSelector(selectContactsError);
 
-    const createContact = async (values: ContactValue, formData: FormData, helper: FormikHelpers<ContactValue>) =>{
-        try {
-            const response = await contactsService.createContact(formData);
-                const contact = { id: response.id, 
-                    name: values.name!, 
-                    surname: values.surname!,
-                    address: values.address!, 
-                    title: values.title!,
-                    email: values.email!, 
-                    phone: values.phone!, 
-                    imagePath: response.path }
-                dispatch(addContact(contact))
-                if (onClose) onClose();
-                if (onSuccess) onSuccess();
-                helper.resetForm();
-        } catch (error: any) {
-            setMessage(error.message)
-        }      
-    }
+    useEffect(() => {
+        if (status === 'failed') {
+            setMessage(error!);
+        } else if (status === 'added') {
+            if (onClose) onClose();
+            if (onSuccess) onSuccess();
+            dispatch(setStatus('succeeded'))
+        }
+    }, [status, error])
+
+    const createContact = async (formData: FormData, helper: FormikHelpers<ContactValue>) =>{
+        dispatch(createNewContact(formData))
+        if (status === 'added') helper.resetForm();    
+    } 
 
     const updateContact = async (values: ContactValue, formData: FormData, helper: FormikHelpers<ContactValue>) =>{
         try {
@@ -77,7 +74,7 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
         if (values.email) formData.append('email', values.email);
         if (values.phone) formData.append('phone', values.phone);
         if (values.file) formData.append('file', values.file);
-        if (create) createContact(values, formData, helper)
+        if (create) createContact(formData, helper)
         else updateContact(values, formData, helper)
     }
 

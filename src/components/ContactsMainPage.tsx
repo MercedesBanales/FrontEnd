@@ -20,6 +20,10 @@ export default function ContactsMainPage( { onClose } : Props) {
         }
       }, [contactsStatus, dispatch])
 
+      useEffect(() => {
+        setFilteredContacts(contacts);
+    }, [contacts]);
+
     const handleChange = (value: string) => {
         const fullName = value.toLowerCase()
         const changedContacts = contacts.filter((contact) => {
