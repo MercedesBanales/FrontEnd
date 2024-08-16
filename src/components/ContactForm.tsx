@@ -1,10 +1,9 @@
 import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
 import * as Yup from 'yup';
-import * as contactsService from "@/services/contactsService";
 import { Contact } from "@/types/Contact";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { createNewContact, selectContactsError, selectContactsStatus, setContacts, setStatus } from "@/app/GlobalRedux/Features/contactsSlice";
+import { createNewContact, selectContactsError, selectContactsStatus, setStatus, updateOriginalContact } from "@/app/GlobalRedux/Features/contactsSlice";
 
 interface Props {
     contact?: Contact;
@@ -29,6 +28,7 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
     const dispatch = useAppDispatch();
     const status = useAppSelector(selectContactsStatus);
     const error = useAppSelector(selectContactsError);
+    const [updatedContact, setUpdatedContact] = useState<Contact | undefined>(contact);
 
     useEffect(() => {
         if (status === 'failed') {
@@ -37,32 +37,34 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
             if (onClose) onClose();
             if (onSuccess) onSuccess();
             dispatch(setStatus('succeeded'))
-        }
+        }   
     }, [status, error])
+
+    useEffect(() => {
+        if (status === 'updated') {
+            if (onSuccess) onSuccess(updatedContact);
+            dispatch(setStatus('succeeded'))
+        }
+    }, [updatedContact])
 
     const createContact = async (formData: FormData, helper: FormikHelpers<ContactValue>) =>{
         dispatch(createNewContact(formData))
         if (status === 'added') helper.resetForm();    
     } 
 
-    const updateContact = async (values: ContactValue, formData: FormData, helper: FormikHelpers<ContactValue>) =>{
-        try {
-            const path = await contactsService.updateContact(formData, contact!.id);
-            const updatedContact = { id: contact!.id, 
-                name: (values.name) ? values.name : contact!.name,
-                surname: (values.surname) ? values.surname : contact!.surname,
-                address: (values.address) ? values.address : contact!.address,
-                title: (values.title) ? values.title : contact!.title,
-                email: (values.email) ? values.email : contact!.email,
-                phone: (values.phone) ? values.phone : contact!.phone,
-                imagePath: (path) ? path : contact!.imagePath}
-            dispatch(setContacts(await contactsService.getContacts()));
-            console.log(updatedContact)
-            if (onSuccess) onSuccess(updatedContact);
-            helper.resetForm();
-        } catch (error: any){
-            setMessage(error.message)
-        }
+    const updateContact = async (values: ContactValue, formData: FormData, helper: FormikHelpers<ContactValue> ) =>{
+        const result = await dispatch(updateOriginalContact({ formData, contact: contact! })).unwrap();
+        setUpdatedContact({
+            id: result.id,
+            name: result.name,
+            surname: result.surname,
+            address: result.address,
+            title: result.title,
+            email: result.email,
+            phone: result.phone,
+            imagePath: result.imagePath
+        });
+        helper.resetForm();
     }
 
     const handleSubmit = async (values: ContactValue, create: boolean, helper: FormikHelpers<ContactValue>) => {

@@ -22,9 +22,23 @@ export const createNewContact = createAppAsyncThunk('contacts/createContact', as
         imagePath: response.path } as Contact
 })
 
+export const updateOriginalContact = createAppAsyncThunk('contacts/updateContact', async (data: { formData: FormData, contact: Contact }) => {
+    const contact = data.contact;
+    const formData = data.formData;
+    const response = await contactsService.updateContact(formData, contact.id);
+    return { id: contact!.id, 
+        name: formData.get('name') ? formData.get('name')!.toString() : contact!.name,
+        surname: formData.get('surname') ? formData.get('surname')!.toString() : contact!.surname,
+        address: formData.get('address') ? formData.get('address')!.toString() : contact!.address,
+        title: formData.get('title') ? formData.get('title')!.toString() : contact!.title,
+        email: formData.get('email') ? formData.get('email')!.toString() : contact!.email,
+        phone: formData.get('phone') ? formData.get('phone')!.toString() : contact!.phone,
+        imagePath: (response) ? response : contact!.imagePath}
+})
+
 interface ContactsState {
     contacts: Contact[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed' | 'added';
+    status: 'idle' | 'loading' | 'succeeded' | 'failed' | 'added' | 'updated';
     error: string | null;
 }
 
@@ -40,9 +54,6 @@ export const contactsSlice = createSlice({
     reducers: {
         setContacts: (state, action: PayloadAction<Contact[]>) => {
             state.contacts = action.payload;
-        },
-        addContact: (state, action: PayloadAction<Contact>) => {
-            state.contacts.push(action.payload);
         },
         setStatus: (state, action: PayloadAction<'idle' | 'loading' | 'succeeded' | 'failed' | 'added'>) => {
             state.status = action.payload;
@@ -69,10 +80,20 @@ export const contactsSlice = createSlice({
             state.status = 'failed'
             state.error = action.error.message ?? 'Unknown Error'
           })
+          .addCase(updateOriginalContact.fulfilled, (state, action) => {
+            state.status = 'updated'
+            state.contacts = state.contacts.map(contact => 
+                contact.id === action.payload.id ? action.payload : contact
+            );
+          })
+          .addCase(updateOriginalContact.rejected, (state, action) => {
+            state.status = 'failed'
+            state.error = action.error.message ?? 'Unknown Error'
+          })
       }
 });
 
-export const { setContacts, addContact, setStatus } = contactsSlice.actions;
+export const { setContacts, setStatus } = contactsSlice.actions;
 export default contactsSlice.reducer;
 
 export const getContacts = (state: RootState) => state.contacts.contacts;
