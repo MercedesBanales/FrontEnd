@@ -86,7 +86,7 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
             }}
             validationSchema={schema}
             onSubmit={(
-            values: ContactValue, formikHelpers: FormikHelpers<ContactValue> ) => {
+                values: ContactValue, formikHelpers: FormikHelpers<ContactValue> ) => {
                 handleSubmit(values as ContactValue, create, formikHelpers);
             }}
             innerRef={ref}
