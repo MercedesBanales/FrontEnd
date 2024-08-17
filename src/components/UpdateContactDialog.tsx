@@ -1,5 +1,6 @@
 import { Contact } from "@/types/Contact";
-import ContactForm, { ContactValue } from "./ContactForm";
+import { ContactValue } from "@/types/ContactValue"
+import ContactForm from "./ContactForm";
 import Image from 'next/image';
 import * as Yup from 'yup';
 import { FormikProps } from "formik";

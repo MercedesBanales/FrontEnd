@@ -1,9 +1,11 @@
-import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import * as Yup from 'yup';
 import { Contact } from "@/types/Contact";
+import { ContactValue } from "@/types/ContactValue"
 import { forwardRef, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { createNewContact, selectContactsError, selectContactsStatus, setStatus, updateOriginalContact } from "@/app/GlobalRedux/Features/contactsSlice";
+import Input from "./commons/Input";
 
 interface Props {
     contact?: Contact;
@@ -12,16 +14,6 @@ interface Props {
     onClose?: () => void;
     setMessage: (message: string) => void
     onSuccess?: (contact?: Contact) => void
-}
-
-export interface ContactValue {
-    name?: string;
-    surname?: string;
-    address?: string;
-    title?: string;
-    email?: string;
-    phone?: string;
-    file?: File | null;
 }
 
 const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ contact, schema, create, onClose, setMessage, onSuccess }, ref) => {
@@ -103,46 +95,22 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
                 <Form className="flex flex-col items-center justify-evenly w-full gap-8 pb-8" encType="multipart/form-data">
                 <div className="flex flex-wrap w-full justify-start h-80 gap-2 py-6 pl-6 overflow-scroll">
                     <div className="flex flex-col gap-1 w-[49%]">
-                        <label className="text-black text-base font-medium">Name</label>
-                        <Field id="name" name="name" type="name" className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm" placeholder={contact?.name}/>
-                        {errors.name && touched.name ? (
-                            <label className="text-red-500 text-sm w-fit">{errors.name}</label>
-                        ) : null}
+                        <Input<ContactValue> name="name" label="Name" type="name" placeholder={contact?.name} />
                     </div>
                     <div className="flex flex-col gap-1 w-[49%]">
-                        <label className="text-black text-base font-medium">Surname</label>
-                        <Field id="surname" name="surname" type="surname" className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm" placeholder={contact?.surname}/>
-                        {errors.surname && touched.surname ? (
-                            <label className="text-red-500 text-sm w-fit">{errors.surname}</label>
-                        ) : null}
+                        <Input<ContactValue> name="surname" label="Surname" type="surname" placeholder={contact?.surname} />
                     </div>
                     <div className="flex flex-col gap-1 w-[49%]">
-                        <label className="text-black text-base font-medium">Title</label>
-                        <Field id="title" name="title" type="title" className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm" placeholder={contact?.title}/>
-                        {errors.title && touched.title ? (
-                            <label className="text-red-500 text-sm w-fit">{errors.title}</label>
-                        ) : null}
+                        <Input<ContactValue> name="title" label="Title" type="title" placeholder={contact?.title} />
                     </div>
                     <div className="flex flex-col gap-1 w-[49%]">
-                        <label className="text-black text-base font-medium">Email</label>
-                        <Field id="email" name="email" type="email" className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm" placeholder={contact?.email}/>
-                        {errors.email && touched.email ? (
-                            <label className="text-red-500 text-sm w-fit">{errors.email}</label>
-                        ) : null}
+                        <Input<ContactValue> name="email" label="Email" type="email" placeholder={contact?.email} />
                     </div>
                     <div className="flex flex-col gap-1 w-[49%]">
-                        <label className="text-black text-base font-medium">Address</label>
-                        <Field id="address" name="address" className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm" placeholder={contact?.address}/>
-                        {errors.address && touched.address ? (
-                            <label className="text-red-500 text-sm w-fit">{errors.address}</label>
-                        ) : null}
+                        <Input<ContactValue> name="address" label="Address" type="address" placeholder={contact?.address} />
                     </div>
                     <div className="flex flex-col gap-1 w-[49%]">
-                        <label className="text-black text-base font-medium">Phone</label>
-                        <Field id="phone" name="phone" className="bg-fuchsia-100 px-4 py-3 rounded-lg placeholder-gray-400 text-sm" placeholder={contact?.phone}/>
-                        {errors.phone && touched.phone ? (
-                            <label className="text-red-500 text-sm w-fit">{errors.phone}</label>
-                        ) : null}
+                        <Input<ContactValue> name="phone" label="Phone" type="phone" placeholder={contact?.phone} />
                     </div>
                     <div className="flex flex-col gap-1 w-[49%]">
                         <label className="text-black text-base font-medium">Profile Picture</label>

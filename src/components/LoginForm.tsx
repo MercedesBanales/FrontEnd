@@ -7,6 +7,8 @@ import ErrorDialog from './ErrorDialog';
 import { useAppDispatch } from '@/app/hooks';
 import { login } from "@/app/GlobalRedux/Features/activeUserSlice";
 import { LoginSchema } from "../schemas/loginSchema";
+import { LoginValue } from '@/types/LoginValue';
+import Input from './commons/Input';
 
 const InputPasswordComponent = ({ field, form, ...props }: { field: any, form: any, props: any }) => (
     <input
@@ -67,14 +69,8 @@ export default function LoginForm() {
             {({errors, touched}) => (
                 <Form className="flex flex-col items-center w-2/4 gap-8">
                 <div className="flex flex-col w-full gap-4">
-                    <Field id="email" name="email" component={InputEmailComponent} />
-                    {errors.email && touched.email ? (
-                        <label className="text-red-500 text-sm">{errors.email}</label>
-                    ) : null}
-                    <Field id="password" name="password" component={InputPasswordComponent} />
-                    {errors.password && touched.password ? (
-                        <label className="text-red-500 text-sm">{errors.password}</label>
-                    ) : null}
+                    <Input<LoginValue> name="email" label="email" type="email" placeholder="johndoe@hotmail.com" />
+                    <Input<LoginValue> name="password" label="password" type="password" placeholder='*******' />
                 </div>
                 <button className="text-white bg-violet-400 rounded-3xl px-12 py-2 w-fit shadow-md hover:font-semibold hover:shadow-lg" type="submit">Login</button>
             </Form>
