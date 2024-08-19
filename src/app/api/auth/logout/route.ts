@@ -1,6 +1,6 @@
 import { serialize } from "cookie";
 
-export function PUT(request: Request, response: Response) {
+export function PUT(request: Request) {
     const cookie = serialize('token', '', {
         httpOnly: true,
         secure: process.env.NODE_ENV !== 'development',

@@ -1,14 +1,14 @@
-import { useSelector } from "react-redux";
+import { useAppSelector } from '../app/hooks'
 import ContactsList from "./ContactsList";
-import { RootState } from "@/app/GlobalRedux/store";
 import { useState } from "react";
+import { getContacts } from "@/app/GlobalRedux/Features/contactsSlice";
 
 interface Props {
     onClose: () => void;
 }
 
 export default function ContactsMainPage( { onClose } : Props) {
-    const contacts = useSelector((state: RootState) => state.contacts.value);
+    const contacts = useAppSelector(getContacts)
     const [filteredContacts, setFilteredContacts] = useState(contacts);
 
     const handleChange = (value: string) => {

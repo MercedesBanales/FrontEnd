@@ -10,7 +10,7 @@ export async function createContact (formData: FormData) : Promise<{ id: string,
 
 
 export async function getContacts() {
-    const res = await fetch('http://localhost:3001/api/contacts', {
+    const res = await fetch('/api/contacts', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

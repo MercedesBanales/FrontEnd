@@ -1,32 +1,38 @@
 import { serialize } from 'cookie';
+import Fetch from '@/helpers/fetch';
+import { LoginSchema } from '@/schemas/loginSchema'
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
-    const response = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+
+    const formData = await req.formData();
+    const body: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      body[key] = value;
     });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message);
-    const cookie = serialize('token', data.token, {
+    await LoginSchema.validate(body, { abortEarly: false });
+
+    const response = await Fetch.post(`${process.env.URL}/login`, formData);
+    const cookie = serialize('token', response.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV !== 'development',
         path: '/'
     });
     const newRes = Response.json({
-      success:true, 
+      success: true, 
       status: 200, 
-      body: { token: data.token }})
+      body: { token: response.token }})
     newRes.headers.set('Set-Cookie', cookie);
     return newRes;
   } catch (error: any) {
-      return Response.json({
+      const body = {
         success: false,
         message: error.message
+      }
+      return new Response(JSON.stringify(body),
+      {
+          status: error.status, 
+          headers: { 'Content-Type': 'application/json' }
       })
   }
 }

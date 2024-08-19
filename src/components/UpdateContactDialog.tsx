@@ -1,28 +1,16 @@
 import { Contact } from "@/types/Contact";
-import ContactForm, { ContactValue } from "./ContactForm";
+import { ContactValue } from "@/types/ContactValue"
+import ContactForm from "./ContactForm";
 import Image from 'next/image';
-import * as Yup from 'yup';
 import { FormikProps } from "formik";
 import { useRef, useState } from "react";
 import ErrorDialog from "./ErrorDialog";
 import SuccessAlert from "./SuccessAlert";
+import { UpdateSchema } from "@/schemas/updateSchema";
 
 interface Props {
     contact: Contact;
 }
-
-const UpdateSchema = Yup.object().shape({
-    name: Yup.string(),
-    surname: Yup.string(),
-    email: Yup.string().email('Invalid email address'),
-    address: Yup.string(),
-    title: Yup.string(),
-    phone: Yup.string(),
-    file: Yup.mixed<File>().nullable()
-                .test("fileFormat", "Unsupported Format", value => {
-                    return !value || (value && ["image/jpeg", "image/png", "image/jpg", "image/webp"].includes(value.type));
-    })
-})
 
 export default function UpdateContactDialog({ contact }: Props) {
     const formikRef = useRef<FormikProps<ContactValue> | null>(null);
@@ -62,8 +50,8 @@ export default function UpdateContactDialog({ contact }: Props) {
                 </div>
             </div>
             <div className="flex flex-col items-start justify-center gap-4">
-                <h1 className="font-bold text-2xl">{contactData!.name} {contact.surname}</h1>
-                <p className="text-base text-gray-500">{contact.title}</p>
+                <h1 className="font-bold text-2xl">{contactData!.name} {contactData!.surname}</h1>
+                <p className="text-base text-gray-500">{contactData!.title}</p>
                 
             </div>
             </div>

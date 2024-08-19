@@ -1,27 +1,33 @@
-export async function PUT(req: Response, { params } : { params: { contact_id: string}}) {
+import Fetch from '@/helpers/fetch';
+import { UpdateSchema } from '@/schemas/updateSchema';
+
+export async function PUT(req: Request, { params } : { params: { contact_id: string}}) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
-        const response = await fetch(`http://localhost:3000/api/contacts/${params.contact_id}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData
+        const body: Record<string, any> = {};
+        formData.forEach((value, key) => {
+        body[key] = value;
         });
-        const data = await response.json();
-        console.log("data", data)
-        if (!response.ok) throw new Error(data.message);
+        await UpdateSchema.validate(body, { abortEarly: false });
+
+        const headers = new Headers({'Authorization': `Bearer ${token}`});
+        const response = await Fetch.put(`${process.env.URL}/contacts/${params.contact_id}`, headers, formData);
         return Response.json({
-            imagePath: data.response.imagePath,
+            imagePath: response.imagePath,
             success: true,
             status: 200
         });
     } catch (err: any) {
-        return Response.json({
+        const body = {
             success: false,
             message: err.message
-        });
+        }
+        return new Response(JSON.stringify(body),
+        {
+            status: err.status, 
+            headers: { 'Content-Type': 'application/json' }
+        })
     }
     
 }

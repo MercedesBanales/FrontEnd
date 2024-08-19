@@ -1,53 +1,53 @@
+import { CreateSchema } from '@/schemas/createSchema';
+import Fetch from '@/helpers/fetch';
+
 export async function POST(req: Request) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
         const formData = await req.formData();
+        const body: Record<string, any> = {};
+        formData.forEach((value, key) => {
+            body[key] = value;
+          });
+        await CreateSchema.validate(body, { abortEarly: false });
 
-        const response = await fetch('http://localhost:3000/api/contacts', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.message);
+        const headers = new Headers({'Authorization': `Bearer ${token}`});
+        const response = await Fetch.post(`${process.env.URL}/contacts`, formData, headers);
         return Response.json({
             success: true,
             status: 200,
-            body: { id: data.id, path: data.imagePath}
+            body: { id: response.id, path: response.imagePath}
         });
     } catch (error: any) {
-        return Response.json({
+        const body = {
             success: false,
             message: error.message
+        }
+        return new Response(JSON.stringify(body), {
+            status: error.status, 
+            headers: { 'Content-Type': 'application/json' }
         })
-
     }
 }
 
-export async function GET (req: Request, res: Response) {
+export async function GET (req: Request) {
     try {
         const token = req.headers.get('Cookie')?.split("=")[1];
-        const response = await fetch('http://localhost:3000/api/contacts', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.message);
+        const headers = new Headers({'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`});
+        const response = await Fetch.get(`${process.env.URL}/contacts`, headers);
         return Response.json({
             success: true,
             status: 200,
-            body: { contacts: data.response.contacts }
+            body: { contacts: response.contacts }
         });
     } catch (error: any) {
-        return Response.json({
+        const body = {
             success: false,
             message: error.message
+        }
+        return new Response(JSON.stringify(body), {
+            status: 500, 
+            headers: { 'Content-Type': 'application/json' }
         })
-        
     }
 }
