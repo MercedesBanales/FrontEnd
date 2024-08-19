@@ -41,7 +41,7 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
     }, [updatedContact])
 
     const createContact = async (formData: FormData, helper: FormikHelpers<ContactValue>) =>{
-        dispatch(createNewContact(formData))
+        await dispatch(createNewContact(formData))
         if (status === 'added') helper.resetForm();    
     } 
 

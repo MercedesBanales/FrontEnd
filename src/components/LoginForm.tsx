@@ -24,7 +24,7 @@ export default function LoginForm() {
             const formData = new FormData();
             formData.append('email', values.email);
             formData.append('password', values.password);
-            dispatch(login(formData));     
+            await dispatch(login(formData));     
             setError(null);
             router.push('/contacts');
         } catch (error: any) {
