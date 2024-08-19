@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from '../app/hooks'
+import { useAppSelector } from '../app/hooks'
 import ContactsList from "./ContactsList";
 import { useState } from "react";
 import { getContacts } from "@/app/GlobalRedux/Features/contactsSlice";

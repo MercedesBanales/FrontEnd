@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { selectActiveUser, userLogout } from '@/app/GlobalRedux/Features/activeUserSlice';
 import { useRouter } from 'next/navigation';
-import * as authenticationService from '@/services/authenticationService';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 
 export default function NavigationBar() {
@@ -21,7 +20,6 @@ export default function NavigationBar() {
 
     const handleLogin = () => {
         if (login === 'Logout') {
-            authenticationService.logout();
             dispatch(userLogout())
         }
         router.push('/login');

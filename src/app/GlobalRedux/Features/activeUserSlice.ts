@@ -16,6 +16,10 @@ export const login = createAppAsyncThunk('users/login', async (formData: FormDat
   }
   })
 
+const logout = createAppAsyncThunk('users/logout', () => {
+  authenticationService.logout();
+} )
+
 interface UserState {
     value: User | null;
 }
@@ -30,6 +34,7 @@ export const activeUserSlice = createSlice({
     reducers: {
         userLogout: (state) => {
           state.value = null;
+          logout();
         }
     },
     extraReducers: builder => {
