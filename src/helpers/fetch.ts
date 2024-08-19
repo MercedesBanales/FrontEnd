@@ -6,10 +6,10 @@ class Fetch {
                 headers: headers
             });
             const data = await response.json();
-            if (!response.ok) throw new Error(data.message);
+            if (!response.ok) throw {status: response.status, message: data.message};
             return data;
         } catch (err: any) {
-            throw new Error(err.message);
+            throw {status: err.status || 500, message: err.message};
         }
     }
 
@@ -21,10 +21,10 @@ class Fetch {
                 headers: headers
             });
             const data = await response.json();
-            if (!response.ok) throw new Error(data.message);
+            if (!response.ok) throw {status: response.status, message: data.message};
             return data;
-        } catch (error: any) {
-            throw new Error(error.message);  
+        } catch (err: any) {
+            throw {status: err.status || 500, message: err.message};
         } 
     }
 
@@ -36,10 +36,10 @@ class Fetch {
                 headers: headers
             });
             const data = await response.json();
-            if (!response.ok) throw new Error(data.message);
+            if (!response.ok) throw {status: response.status, message: data.message};
             return data;
         } catch (err: any) {
-            throw new Error(err.message);
+            throw {status: err.status || 500, message: err.message};
         }
     }
 }

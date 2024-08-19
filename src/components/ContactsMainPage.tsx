@@ -1,27 +1,15 @@
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import ContactsList from "./ContactsList";
-import { useEffect, useState } from "react";
-import { getContacts, selectContactsStatus, fetchContacts } from "@/app/GlobalRedux/Features/contactsSlice";
+import { useState } from "react";
+import { getContacts } from "@/app/GlobalRedux/Features/contactsSlice";
 
 interface Props {
     onClose: () => void;
 }
 
 export default function ContactsMainPage( { onClose } : Props) {
-    const dispatch = useAppDispatch()
     const contacts = useAppSelector(getContacts)
-    const contactsStatus = useAppSelector(selectContactsStatus)
     const [filteredContacts, setFilteredContacts] = useState(contacts);
-
-    useEffect(() => {
-        if (contactsStatus === 'idle') {
-            dispatch(fetchContacts())
-        }
-      }, [contactsStatus, dispatch])
-
-      useEffect(() => {
-        setFilteredContacts(contacts);
-    }, [contacts]);
 
     const handleChange = (value: string) => {
         const fullName = value.toLowerCase()

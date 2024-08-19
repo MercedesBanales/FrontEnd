@@ -8,8 +8,12 @@ import { createAppAsyncThunk } from '../../withTypes';
 import { RootState } from '../store';
 
 export const login = createAppAsyncThunk('users/login', async (formData: FormData) => {
+  try {
     await authenticationService.login(formData);
     return await usersService.getUser();
+  } catch (error: any) {
+    throw new Error(error.message)
+  }
   })
 
 interface UserState {
@@ -24,9 +28,9 @@ export const activeUserSlice = createSlice({
     name: 'activeUser',
     initialState,
     reducers: {
-        setActiveUser: (state, action: PayloadAction<User | null>) => {
-            state.value = action.payload;
-        },
+        userLogout: (state) => {
+          state.value = null;
+        }
     },
     extraReducers: builder => {
         builder
@@ -42,6 +46,6 @@ export const activeUserSlice = createSlice({
       }
 });
 
-export const { setActiveUser } = activeUserSlice.actions;
+export const { userLogout } = activeUserSlice.actions;
 export default activeUserSlice.reducer;
 export const selectActiveUser = (state: RootState) => state.activeUser.value;

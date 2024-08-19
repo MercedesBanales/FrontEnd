@@ -3,16 +3,15 @@
 import Image from 'next/image'
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { RootState } from '@/app/GlobalRedux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { setActiveUser } from '@/app/GlobalRedux/Features/activeUserSlice';
+import { selectActiveUser, userLogout } from '@/app/GlobalRedux/Features/activeUserSlice';
 import { useRouter } from 'next/navigation';
 import * as authenticationService from '@/services/authenticationService';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 
 export default function NavigationBar() {
     const [login, setLogin] = useState('Login');
-    const activeUser = useSelector((state: RootState) => state.activeUser.value);
-    const dispatch = useDispatch();
+    const activeUser = useAppSelector(selectActiveUser);
+    const dispatch = useAppDispatch();
     const router = useRouter();
 
     useEffect(() => {
@@ -22,8 +21,8 @@ export default function NavigationBar() {
 
     const handleLogin = () => {
         if (login === 'Logout') {
-            dispatch(setActiveUser(null))
             authenticationService.logout();
+            dispatch(userLogout())
         }
         router.push('/login');
     }

@@ -25,7 +25,7 @@ export async function PUT(req: Request, { params } : { params: { contact_id: str
         }
         return new Response(JSON.stringify(body),
         {
-            status: 500, 
+            status: err.status, 
             headers: { 'Content-Type': 'application/json' }
         })
     }

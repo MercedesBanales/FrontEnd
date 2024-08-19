@@ -10,9 +10,13 @@ export async function GET (request: Request) {
             body: {email: response.email, name: response.name}
         });
     } catch (err: any) {
-        return Response.json({
+        const body = {
             success: false,
             message: err.message
+        }
+        return new Response(JSON.stringify(body), {
+            status: err.status, 
+            headers: { 'Content-Type': 'application/json' }
         })
     }
 }

@@ -9,6 +9,7 @@ import { login } from "@/app/GlobalRedux/Features/activeUserSlice";
 import { LoginSchema } from "../schemas/loginSchema";
 import { LoginValue } from '@/types/LoginValue';
 import Input from './commons/Input';
+import { fetchContacts } from '@/app/GlobalRedux/Features/contactsSlice';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -24,7 +25,8 @@ export default function LoginForm() {
             const formData = new FormData();
             formData.append('email', values.email);
             formData.append('password', values.password);
-            await dispatch(login(formData));     
+            await dispatch(login(formData)).unwrap();     
+            await dispatch(fetchContacts())
             setError(null);
             router.push('/contacts');
         } catch (error: any) {
