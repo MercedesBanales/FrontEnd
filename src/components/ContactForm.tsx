@@ -25,6 +25,7 @@ const ContactForm = forwardRef<FormikProps<ContactValue> | null, Props>( ({ cont
     useEffect(() => {
         if (status === 'failed') {
             setMessage(error!);
+            dispatch(setStatus('idle'))
         } else if (status === 'added') {
             if (onClose) onClose();
             if (onSuccess) onSuccess();

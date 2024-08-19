@@ -1,6 +1,5 @@
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import ContactsList from "./ContactsList";
-import { RootState } from "@/app/GlobalRedux/store";
 import { useEffect, useState } from "react";
 import { getContacts, selectContactsStatus, fetchContacts } from "@/app/GlobalRedux/Features/contactsSlice";
 

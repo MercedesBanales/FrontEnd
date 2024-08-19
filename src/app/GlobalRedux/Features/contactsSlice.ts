@@ -25,6 +25,8 @@ export const createNewContact = createAppAsyncThunk('contacts/createContact', as
 export const updateOriginalContact = createAppAsyncThunk('contacts/updateContact', async (data: { formData: FormData, contact: Contact }) => {
     const contact = data.contact;
     const formData = data.formData;
+    console.log(contact)
+    console.log(formData.get('file'))
     const response = await contactsService.updateContact(formData, contact.id);
     return { id: contact!.id, 
         name: formData.get('name') ? formData.get('name')!.toString() : contact!.name,

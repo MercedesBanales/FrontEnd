@@ -1,4 +1,4 @@
-import Fetch from '../../../helpers/fetch';
+import Fetch from '@/helpers/fetch';
 
 export async function GET (request: Request) {
     try {
